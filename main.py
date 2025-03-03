@@ -1,9 +1,14 @@
-# Imports
+"""
+@auhtor : Loan BOROWSKI
+"""
+
+#? Imports
+from PIL import Image
 import customtkinter as ctk
 import random as rd
-from PIL import Image
+import hashlib
 
-# Appearance
+#? Appearance
 primary_color = "#33365c"
 primary_color_hover = "#242642"
 secondary_color = "#b3193d"
@@ -12,7 +17,7 @@ text_color = "#e7ffee"
 text_color_hover = "#cccfcd"
 ctk.set_appearance_mode("dark")
 
-# Window
+#? Window
 window = ctk.CTk()
 window.title("Login")
 window.iconbitmap("./icons/icon Login.ico")
@@ -24,7 +29,7 @@ img_pwd_gen = ctk.CTkImage(light_image = Image.open("./icons/icon pwd-gen.png"),
 img_crypt = ctk.CTkImage(light_image = Image.open("./icons/icon Crypt Decrypt.ico"), size = (30, 30))
 img_manage = ctk.CTkImage(light_image = Image.open("./icons/icon manage.png"), size = (30, 30))
 
-# Functions
+#? Functions
 def return_button():
     global input_rpg
     if return_login == True:
@@ -130,7 +135,7 @@ def switch_languages():
 def login():
     global password
     input = entry_input.get()
-    if input == password:
+    if hashlib.md5(input.encode()).hexdigest() == password:
         label_input.place_forget()
         entry_input.place_forget()
         button_new_pwd.place_forget()
@@ -216,9 +221,9 @@ def login_page():
 
 def modify_pwd():
     global password
-    actual = entry_actual_pwd.get()
-    new_pwd_1 = entry_new_pwd_1.get()
-    new_pwd_2 = entry_new_pwd_2.get()
+    actual = hashlib.md5(entry_actual_pwd.get().encode()).hexdigest()
+    new_pwd_1 = hashlib.md5(entry_new_pwd_1.get().encode()).hexdigest()
+    new_pwd_2 = hashlib.md5(entry_new_pwd_2.get().encode()).hexdigest()
     space_in_new_pwd = False
     
     for i in range(len(new_pwd_1)):
@@ -266,7 +271,7 @@ def modify_pwd():
 
 def write_pwd(pwd:str):
     file_rewrite = open("password.txt", "w")
-    file_rewrite.write(pwd)
+    file_rewrite.write(hashlib.md5(pwd.encode()).hexdigest())
     file_rewrite.close()
 
 
