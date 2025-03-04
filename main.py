@@ -44,7 +44,7 @@ def switch_languages():
         switch_language.configure(progress_color = text_color, button_color = text_color, button_hover_color = text_color_hover, fg_color = secondary_color)
         state_switch_language = False
         
-        # Login
+        #? Login
         switch_language.configure(text = "English")
         label_input.configure(text = "Input your password")
         label_actual_pwd.configure(text = "Actual password")
@@ -65,14 +65,14 @@ def switch_languages():
         button_manage.configure(text = "Manage your passwords")
         button_login_page.configure(text = "Lock the session")
         
-        # Crypt Decrypt
+        #? Crypt Decrypt
         label_input_crypt_decrypt.configure(text = "Input")
         label_output.configure(text = "Output")
         label_enter_key.configure(text = "Put a key here")
         button_crypt.configure(text = "Crypt")
         button_decrypt.configure(text = "Decrypt")
         
-        # Random Password Generator
+        #? Random Password Generator
         label_error_space_rpg.configure(text = "Password must not contain space !")
         label_pin_strong.configure(text = "PIN strong !")
         label_pin_weak.configure(text = "PIN weak !")
@@ -89,7 +89,7 @@ def switch_languages():
         switch_language.configure(progress_color = text_color, button_color = secondary_color, button_hover_color = secondary_color_hover, fg_color = secondary_color)
         state_switch_language = True
         
-        # Login
+        #? Login
         switch_language.configure(text = "Français")
         label_input.configure(text = "Entrer votre mot de passe")
         label_actual_pwd.configure(text = "Mot de passe actuel")
@@ -110,14 +110,14 @@ def switch_languages():
         button_manage.configure(text = "Gérer vos mots de passe")
         button_login_page.configure(text = "Verrouiller la session")
         
-        # Crypt Decrypt
+        #? Crypt Decrypt
         label_input_crypt_decrypt.configure(text = "Entrée")
         label_output.configure(text = "Sortie")
         label_enter_key.configure(text = "Entrer une clé ici")
         button_crypt.configure(text = "Crypter")
         button_decrypt.configure(text = "Décrypter")
         
-        # Random Password Generator
+        #? Random Password Generator
         label_error_space_rpg.configure(text = "Le mot de passe ne doit\npas contenir d'espace !")
         label_pin_strong.configure(text = "PIN fort !")
         label_pin_weak.configure(text = "PIN faible !")
@@ -152,7 +152,7 @@ def new_pwd():
     window.geometry("800x550")
     return_modify_pwd, return_login = True, False
     
-    # Login
+    #?Login
     label_input.place_forget()
     entry_input.place_forget()
     button_new_pwd.place_forget()
@@ -161,7 +161,7 @@ def new_pwd():
     label_error_empty_pwd.place_forget()
     label_error_space.place_forget()
     
-    # Modify Password
+    #? Modify Password
     label_actual_pwd.place(x = 110, y = 10)
     entry_actual_pwd.place(relx = 0.5, anchor = "n", y = 55)
     label_new_pwd_1.place(x = 110, y = 140)
@@ -182,7 +182,7 @@ def login_page():
     else:
         window.title("Se connecter")
     
-    # Modify Password
+    #? Modify Password
     label_actual_pwd.place_forget()
     entry_actual_pwd.place_forget()
     label_new_pwd_1.place_forget()
@@ -196,7 +196,7 @@ def login_page():
     entry_new_pwd_1.delete(0, "end")
     entry_new_pwd_2.delete(0, "end")
     
-    # Errors
+    #? Errors
     label_pwd_change_ok.place_forget()
     label_error_login.place_forget()
     label_error_actual_pwd_wrong.place_forget()
@@ -204,13 +204,13 @@ def login_page():
     label_error_empty_pwd.place_forget()
     label_error_space.place_forget()
     
-    # Menu
+    #? Menu
     button_crypt_decrypt.place_forget()
     button_pwd_gen.place_forget()
     button_login_page.place_forget()
     button_manage.place_forget()
     
-    # Login
+    #? Login
     label_input.place(relx = 0.5, anchor = "n", y = 40)
     entry_input.place(relx = 0.5, anchor = "n", y = 100)
     button_new_pwd.place(x = 100, y = 260)
@@ -221,27 +221,15 @@ def login_page():
 
 def modify_pwd():
     global password
-    actual = hashlib.md5(entry_actual_pwd.get().encode()).hexdigest()
-    new_pwd_1 = hashlib.md5(entry_new_pwd_1.get().encode()).hexdigest()
-    new_pwd_2 = hashlib.md5(entry_new_pwd_2.get().encode()).hexdigest()
-    space_in_new_pwd = False
+    actual = entry_actual_pwd.get()
+    new_pwd_1 = entry_new_pwd_1.get()
+    new_pwd_2 = entry_new_pwd_2.get()
     
-    for i in range(len(new_pwd_1)):
-        if new_pwd_1[i] == " ":
-            space_in_new_pwd = True
-    
-    if actual == password:
-        if space_in_new_pwd == True:
-            label_pwd_change_ok.place_forget()
-            label_error_actual_pwd_wrong.place_forget()
-            label_error_empty_pwd.place_forget()
-            label_error_login.place_forget()
-            label_error_new_pwd_diff.place_forget()
-            label_error_space.place(relx = 0.5, anchor = "n", y = 395)
+    if hashlib.md5(actual.encode()).hexdigest() == password:
         
-        elif new_pwd_1 == new_pwd_2:
+        if hashlib.md5(new_pwd_1.encode()).hexdigest() == hashlib.md5(new_pwd_2.encode()).hexdigest():
             if new_pwd_1 != "":
-                password = new_pwd_2
+                password = hashlib.md5(new_pwd_2.encode()).hexdigest()
                 label_error_actual_pwd_wrong.place_forget()
                 label_error_new_pwd_diff.place_forget()
                 label_error_empty_pwd.place_forget()
@@ -249,7 +237,7 @@ def modify_pwd():
                 label_error_space.place_forget()
                 label_pwd_change_ok.place(relx = 0.5, anchor = "n", y = 395)
                 entry_actual_pwd.delete(0, "end")
-                write_pwd(new_pwd_2)
+                write_pwd(password)
             else:
                 label_error_empty_pwd.place(relx = 0.5, anchor = "n", y = 395)
             
@@ -271,7 +259,7 @@ def modify_pwd():
 
 def write_pwd(pwd:str):
     file_rewrite = open("password.txt", "w")
-    file_rewrite.write(hashlib.md5(pwd.encode()).hexdigest())
+    file_rewrite.write(pwd)
     file_rewrite.close()
 
 
@@ -283,7 +271,7 @@ def menu():
     label_input.place_forget()
     button_menu.place_forget()
     
-    # Crypt Decrypt
+    #? Crypt Decrypt
     label_input_crypt_decrypt.place_forget()
     text_box_input_crypt_decypt.place_forget()
     button_crypt.place_forget()
@@ -292,7 +280,7 @@ def menu():
     label_output.place_forget()
     text_box_output_crypt_decrypt.place_forget()
     
-    # Random Password Generator
+    #? Random Password Generator
     label_input_rpg.place_forget()
     slider_rpg.place_forget()
     label_val_slide.place_forget()
@@ -310,11 +298,11 @@ def menu():
     label_pin_weak.place_forget()
     label_pin_strong.place_forget()
     
-    # Manage Password
+    #? Manage Password
     text_box_input_manage.place_forget()
     in_manage_pwd = False
     
-    # Menu
+    #? Menu
     button_crypt_decrypt.place(relx = 0.5, anchor = "n", y = 40)
     button_pwd_gen.place(relx = 0.5, anchor = "n", y = 120)
     button_manage.place(relx = 0.5, anchor = "n", y = 200)
@@ -331,14 +319,14 @@ def to_crypt_decrypt_software():
     else:
         window.title("Cryptage / Decryptage")
     
-    # Menu
+    #? Menu
     button_crypt_decrypt.place_forget()
     button_pwd_gen.place_forget()
     button_login_page.place_forget()
     button_manage.place_forget()
     switch_language.place_forget()
     
-    # Crypt Decrypt
+    #? Crypt Decrypt
     label_input_crypt_decrypt.place(x = 102, y = 10)
     text_box_input_crypt_decypt.place(x = 10, y = 50)
     button_crypt.place(relx = 0.5, anchor = "n", y = 50)
@@ -398,14 +386,14 @@ def to_pwd_gen():
     else:
         window.title("Générateur de mots de passe")
     
-    # Menu
+    #? Menu
     button_crypt_decrypt.place_forget()
     button_pwd_gen.place_forget()
     button_manage.place_forget()
     button_login_page.place_forget()
     button_menu.place(x = 10, y = 10)
     
-    # Random Password Generate
+    #? Random Password Generate
     switch.place(x = 255, y = 10)
     label_input_rpg.place(relx = 0.5, anchor = "n", y = 40)
     slider_rpg.place(relx = 0.5, anchor = "n", y = 100)
@@ -648,7 +636,7 @@ def to_manage_pwd():
     else:
         window.title("Manager de mots de passe")
     
-    # Menu
+    #? Menu
     button_crypt_decrypt.place_forget()
     button_pwd_gen.place_forget()
     button_manage.place_forget()
@@ -674,34 +662,34 @@ def destroy():
     window.destroy()
 
 
-# Vars
-    # Return Button
+#? Vars
+    #? Return Button
 return_login = True
 return_modify_pwd = False
 
-    # Login
+    #? Login
 file_read = open("password.txt", "r")
 password = file_read.read()
 file_read.close()
 state_switch_language = False
 
-    # Random Password Generator
+    #? Random Password Generator
 input_rpg = 20
 button_to_try_pwd = False
 
-    # Crypt Decrypt Software
+    #? Crypt Decrypt Software
 alph = []
 for i in range(32, 127):
     alph.append(chr(i))
 carac_accent = ["€", "é", "è", "ê", "ë", "à", "â", "ù", "û", "ü", "ô", "î", "ç"]
 alph.extend(carac_accent)
 
-    # Manage Passwords
+    #? Manage Passwords
 in_manage_pwd = False
 
 
-# Login
-    # Labels
+#? Login
+    #? Labels
 label_input = ctk.CTkLabel(window, text = "Input your password", font = ("Trebuchet MS", 25), text_color = text_color)
 label_actual_pwd = ctk.CTkLabel(window, text = "Actual password", font = ("Trebuchet MS", 20), text_color = text_color)
 label_new_pwd_1 = ctk.CTkLabel(window, text = "Enter your new password", font = ("Trebuchet MS", 20), text_color = text_color)
@@ -713,23 +701,23 @@ label_error_space = ctk.CTkLabel(window, text = "Password must not contain space
 label_error_new_pwd_diff = ctk.CTkLabel(window, text = "The passwords are not the same !",text_color = "red", font = ("Trebuchet MS", 20))
 label_error_empty_pwd = ctk.CTkLabel(window, text = "The new password must not be empty !", text_color = "red", font = ("Trebuchet MS", 20))
 
-    # Entry
+    #? Entry
 entry_input = ctk.CTkEntry(window, width = 600, height = 100, corner_radius = 30, font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, fg_color = primary_color_hover, text_color = text_color)
 entry_actual_pwd = ctk.CTkEntry(window, width = 600, height = 75, corner_radius = 20,font = ("Trebuchet MS", 20), border_width = 1, border_color = text_color, fg_color = primary_color_hover, text_color = text_color)
 entry_new_pwd_1 = ctk.CTkEntry(window, width = 600, height = 75, corner_radius = 20,font = ("Trebuchet MS", 20), border_width = 1, border_color = text_color, fg_color = primary_color_hover, text_color = text_color)
 entry_new_pwd_2 = ctk.CTkEntry(window, width = 600, height = 75, corner_radius = 20,font = ("Trebuchet MS", 20), border_width = 1, border_color =text_color, fg_color = primary_color_hover, text_color = text_color)
 
-    # Buttons
+    #? Buttons
 button_login = ctk.CTkButton(window, width = 258, height = 60,command = login, corner_radius = 30,text = "Login", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color)
 button_new_pwd = ctk.CTkButton( window, width = 50, height = 60, command = new_pwd, corner_radius = 30,text = "Modify your password", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color) 
 button_back = ctk.CTkButton(window, width = 200, height = 50, command = login_page, corner_radius = 30,text = "Back", font = ("Trebuchet MS", 20), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color)
 button_modify = ctk.CTkButton(window, width = 50, height = 50, command = modify_pwd, corner_radius = 30,text = "Modify your password", font = ("Trebuchet MS", 20), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color)
 
-    # Switch
+    #? Switch
 switch_language = ctk.CTkSwitch(window, switch_height = 30, switch_width = 60, text = "English", corner_radius = 20, command = switch_languages, font = ("Trebuchet MS", 20), progress_color = text_color, button_hover_color = text_color_hover, fg_color = secondary_color)
 
 
-    # Menu
+    #? Menu
 button_menu = ctk.CTkButton(window, width = 10, corner_radius = 20, command = menu, text = "Menu", font = ("Trebuchet MS", 20), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color)
 button_pwd_gen = ctk.CTkButton(window, width = 370, height = 40, corner_radius = 30, command = to_pwd_gen, text = "Random Password Generator", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color, image = img_pwd_gen)
 button_crypt_decrypt = ctk.CTkButton(window, width = 370, height = 40, corner_radius = 30, command = to_crypt_decrypt_software, text = "Crypt / Decrytp Software", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color, image = img_crypt)
@@ -737,26 +725,26 @@ button_manage = ctk.CTkButton(window, width = 370, height = 40, corner_radius = 
 button_login_page =ctk.CTkButton(window, width = 80, height = 50, corner_radius = 30, command = login_page, text = "Lock the session", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color)
 
 
-# Crypt Decrypt
-    # Labels
+#? Crypt Decrypt
+    #? Labels
 label_input_crypt_decrypt = ctk.CTkLabel(window, width = 100, height = 25, corner_radius = 20, text = "Input", font = ("Trebuchet MS", 25), text_color = text_color)
 label_output = ctk.CTkLabel(window, width = 100, height = 25, corner_radius = 20, text = "Output", font = ("Trebuchet MS", 25), text_color = text_color)
 label_enter_key = ctk.CTkLabel(window, text = "Put a key here", font = ("Trebuchet MS", 25), text_color = text_color)
 
-    # Buttons
+    #? Buttons
 button_crypt = ctk.CTkButton(window, width = 200, height = 100, corner_radius = 20, text = "Crypt", command = crypt, font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color)
 button_decrypt = ctk.CTkButton(window, width = 200, height = 100, corner_radius = 20, text = "Decrypt", command = decrypt, font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color)
 
-    # Entry
+    #? Entry
 entry_key_crypt = ctk.CTkEntry(window, width = 300, height = 80, corner_radius = 20, font = ("Arila", 25),border_width = 1, border_color = text_color, fg_color = primary_color_hover, text_color=text_color)
 
-    # Textebox
+    #? Textebox
 text_box_input_crypt_decypt = ctk.CTkTextbox(window, width = 300, height = 400, corner_radius = 20, font = ("Trebuchet MS", 25), fg_color = primary_color_hover, border_color = text_color, border_width = 1, text_color = text_color)
 text_box_output_crypt_decrypt = ctk.CTkTextbox(window, width = 300, height = 400, corner_radius = 20, font = ("Trebuchet MS", 25), fg_color = primary_color_hover, border_color = text_color, border_width = 1, text_color = text_color)
 
 
-# Random Password Generator
-    # Labels
+#? Random Password Generator
+    #? Labels
 label_input_rpg = ctk.CTkLabel(window, width = 10, height = 30, text = "Input the lenght of your password", font = ("Trebuchet MS", 20), text_color = text_color)
 label_val_slide = ctk.CTkLabel(window, width = 50, height = 25, corner_radius = 20, text = "20", font = ("Trebuchet MS", 20), text_color = text_color)
 label_pwd_vulnerable = ctk.CTkLabel(window, text = "Password vulnerable !", text_color = "red", font = ("Trebuchet MS", 20))
@@ -767,27 +755,27 @@ label_pin_weak = ctk.CTkLabel(window, text = "PIN weak !", text_color = "orange"
 label_pin_strong = ctk.CTkLabel(window, text = "PIN strong !", text_color = "green", font = ("Trebuchet MS", 20))
 label_error_space_rpg = ctk.CTkLabel(window, text = "Password must not contain space !", text_color = "red", font = ("Trebuchet MS", 20))
 
-    # Buttons
+    #? Buttons
 button_gen = ctk.CTkButton(window, height = 40, corner_radius = 30, text = "Generate a\npassword", command = to_pwd_gen, font = ("Trebuchet MS", 13), state = "disabled", hover_color = secondary_color_hover, border_width = 1, border_color = text_color, fg_color = secondary_color, text_color = text_color)
 button_try_pwd = ctk.CTkButton(window, height = 40, corner_radius = 30, text = "Test the effectiveness\nof your password", command = to_try_pwd, font = ("Trebuchet MS", 13), hover_color = secondary_color_hover, border_width = 1, border_color = text_color, fg_color = secondary_color, text_color = text_color)
 
-    # Textbox
+    #? Textbox
 text_box_output_rpg = ctk.CTkTextbox(window, width = 300, height = 93, corner_radius = 20, font = ("Trebuchet MS", 20), border_width = 1, border_color = text_color, fg_color = primary_color_hover, text_color = text_color)
 text_box_input_rpg = ctk.CTkTextbox(window, width = 300, height = 93, corner_radius = 20, font = ("Trebuchet MS", 20), border_width = 1, border_color = text_color, fg_color = primary_color_hover, text_color = text_color)
 
-    # Slider
+    #? Slider
 slider_rpg = ctk.CTkSlider(window, width = 300, from_ = 1, to = 40, command = slider_event_rpg, button_hover_color = secondary_color_hover, fg_color = secondary_color, button_color = secondary_color)
 
-    # Switch
+    #? Switch
 switch = ctk.CTkSwitch(window, corner_radius = 20, command = pwd_to_pin, font = ("Trebuchet MS", 15), progress_color = text_color, button_hover_color = text_color_hover, fg_color = secondary_color, text = "Pwd")
 
 
-# Manage Password
-    # Textbox
+#? Manage Password
+    #? Textbox
 text_box_input_manage = ctk.CTkTextbox(window, width = 780, height = 350, font = ("Trebuchet MS", 20), border_width = 1, border_color = text_color, fg_color = primary_color_hover, text_color = text_color)
 
 
-# Places
+#? Places
 label_input.place(relx = 0.5, anchor = "n", y = 40)
 entry_input.place(relx = 0.5, anchor = "n", y = 100)
 button_new_pwd.place(x = 100, y = 260)
@@ -795,10 +783,10 @@ button_login.place(x = 440, y = 260)
 switch_language.place(x = 650, y = 10)
 
 
-# Bind
+#? Bind
 window.bind("<Return>", lambda _:return_button())
 window.bind("<Escape>", lambda _: destroy())
 
 
-# Mainloop
+#? Mainloop
 window.mainloop()
