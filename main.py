@@ -772,7 +772,7 @@ def apply_changes():
     text_box_input_manage.configure(fg_color=primary_color_hover, border_color=text_color, text_color=text_color)
     text_box_input_rpg.configure(fg_color=primary_color_hover, border_color=text_color, text_color=text_color)
     text_box_output_rpg.configure(fg_color=primary_color_hover, border_color=text_color, text_color=text_color)
-    slider_rpg.configure(fg_color=primary_color_hover, border_color=text_color, button_color=text_color, button_hover_color=text_color_hover, progress_color=secondary_color)
+    slider_rpg.configure(fg_color=primary_color_hover, button_color=text_color, button_hover_color=text_color_hover, progress_color=secondary_color)
     switch.configure(progress_color=text_color, button_hover_color=text_color_hover, fg_color=secondary_color, button_color=text_color, text_color=text_color)
     switch_language.configure(progress_color=text_color, button_hover_color=text_color_hover, fg_color=secondary_color, button_color=text_color, text_color=text_color)
     for switch_name in switchs:
@@ -794,6 +794,9 @@ def destroy():
     window.destroy()
 
 #? Vars
+values = ["By default", "Black", "White", "Black and Red", "Grey and Red", "Blue and Brown", "Blue and Orange", "Black and Blue", "Green and Orange", "White and Blue", "Blue and Yellow", "Burgundy and Black"]
+values_fr = ["Par défault", "Noir", "Blanc", "Noir et Rouge", "Gris et Rouge", "Bleu et Marron", "Bleu et Orange", "Noir et Bleu", "Vert et Orange", "Blanc et Bleu", "Bleu et Jaune", "Vermillon et Noir"]
+    
     #? Return Button
 return_login = True
 return_modify_pwd = False
@@ -803,8 +806,6 @@ file_read = open("password.txt", "r")
 password = file_read.read()
 file_read.close()
 state_switch_language = False
-values = ["By default", "Black", "White", "Black and Red", "Grey and Red", "Blue and Brown", "Blue and Orange", "Black and Blue", "Green and Orange", "White and Blue", "Blue and Yellow", "Burgundy and Black"]
-values_fr = ["Par défault", "Noir", "Blanc", "Noir et Rouge", "Gris et Rouge", "Bleu et Marron", "Bleu et Orange", "Noir et Bleu", "Vert et Orange", "Blanc et Bleu", "Bleu et Jaune", "Vermillon et Noir"]
 
     #? Random Password Generator
 input_rpg = 20
