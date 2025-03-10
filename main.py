@@ -37,11 +37,10 @@ def return_button():
     elif return_modify_pwd == True:
         modify_pwd()
 
-
 def switch_languages():
     global state_switch_language
     if switch_language.get() == 0:
-        switch_language.configure(progress_color = text_color, button_color = text_color, button_hover_color = text_color_hover, fg_color = secondary_color)
+        change_switch_color(switch_language)
         state_switch_language = False
         
         #? Login
@@ -64,7 +63,9 @@ def switch_languages():
         button_pwd_gen.configure(text = "Random Password Generator")
         button_manage.configure(text = "Manage your passwords")
         button_login_page.configure(text = "Lock the session")
-        
+        palet_name = option_menu_palet.get()
+        option_menu_palet.configure(values=values)
+        option_menu_palet.set(values[values_fr.index(palet_name)])
         #? Crypt Decrypt
         label_input_crypt_decrypt.configure(text = "Input")
         label_output.configure(text = "Output")
@@ -86,7 +87,7 @@ def switch_languages():
         if switch.get() == 0:
             switch.configure(text = "Pwd")
     else:
-        switch_language.configure(progress_color = text_color, button_color = secondary_color, button_hover_color = secondary_color_hover, fg_color = secondary_color)
+        change_switch_color(switch_language)
         state_switch_language = True
         
         #? Login
@@ -109,6 +110,9 @@ def switch_languages():
         button_pwd_gen.configure(text = "Générateur de mot de passe Aléatoire")
         button_manage.configure(text = "Gérer vos mots de passe")
         button_login_page.configure(text = "Verrouiller la session")
+        palet_name = option_menu_palet.get()
+        option_menu_palet.configure(values=values_fr)
+        option_menu_palet.set(values_fr[values.index(palet_name)])
         
         #? Crypt Decrypt
         label_input_crypt_decrypt.configure(text = "Entrée")
@@ -131,7 +135,6 @@ def switch_languages():
         if switch.get() == 0:
             switch.configure(text = "Mdp")
 
-
 def login():
     global password
     input = entry_input.get()
@@ -146,12 +149,12 @@ def login():
         entry_input.delete(0, "end")
         label_error_login.place(x = 290, y = 210)
 
-
 def new_pwd():
     global return_modify_pwd, return_login
     window.geometry("800x550")
     return_modify_pwd, return_login = True, False
-    
+    option_menu_palet.place_forget()
+
     #?Login
     label_input.place_forget()
     entry_input.place_forget()
@@ -170,7 +173,6 @@ def new_pwd():
     entry_new_pwd_2.place(relx = 0.5, anchor = "n", y = 315)
     button_back.place(x = 100, y = 440)
     button_modify.place(x = 700, anchor = "ne", y = 440)
-
 
 def login_page():
     global return_modify_pwd, return_login
@@ -217,7 +219,7 @@ def login_page():
     button_login.place(x = 440, y = 260)
     switch_language.place(x = 650, y = 10)
     switch_language.configure(switch_height = 30, switch_width = 60)
-
+    option_menu_palet.place(x=10, y=10)
 
 def modify_pwd():
     global password
@@ -256,12 +258,10 @@ def modify_pwd():
         label_error_space.place_forget()
         label_error_actual_pwd_wrong.place(relx = 0.5, anchor = "n", y = 395)
 
-
 def write_pwd(pwd:str):
     file_rewrite = open("password.txt", "w")
     file_rewrite.write(pwd)
     file_rewrite.close()
-
 
 def menu():
     global in_manage_pwd
@@ -270,10 +270,11 @@ def menu():
     window.iconbitmap("./icons/icon Menu.ico")
     label_input.place_forget()
     button_menu.place_forget()
+    option_menu_palet.place(x=10, y=10)
     
     #? Crypt Decrypt
     label_input_crypt_decrypt.place_forget()
-    text_box_input_crypt_decypt.place_forget()
+    text_box_input_crypt_decrypt.place_forget()
     button_crypt.place_forget()
     entry_key_crypt.place_forget()
     button_decrypt.place_forget()
@@ -303,13 +304,12 @@ def menu():
     in_manage_pwd = False
     
     #? Menu
-    button_crypt_decrypt.place(relx = 0.5, anchor = "n", y = 40)
-    button_pwd_gen.place(relx = 0.5, anchor = "n", y = 120)
-    button_manage.place(relx = 0.5, anchor = "n", y = 200)
+    button_crypt_decrypt.place(relx = 0.5, anchor = "n", y = 60)
+    button_pwd_gen.place(relx = 0.5, anchor = "n", y = 140)
+    button_manage.place(relx = 0.5, anchor = "n", y = 220)
     button_login_page.place(relx = 0.5, anchor = "n", y = 320)
     switch_language.place(x = 680, y = 10)
     switch_language.configure(switch_height = 20, switch_width = 40)
-
 
 def to_crypt_decrypt_software():
     window.geometry("950x460")
@@ -325,10 +325,11 @@ def to_crypt_decrypt_software():
     button_login_page.place_forget()
     button_manage.place_forget()
     switch_language.place_forget()
+    option_menu_palet.place_forget()
     
     #? Crypt Decrypt
     label_input_crypt_decrypt.place(x = 102, y = 10)
-    text_box_input_crypt_decypt.place(x = 10, y = 50)
+    text_box_input_crypt_decrypt.place(x = 10, y = 50)
     button_crypt.place(relx = 0.5, anchor = "n", y = 50)
     label_enter_key.place(relx = 0.5, anchor = "n", y = 180)
     entry_key_crypt.place(relx = 0.5, anchor = "n", y = 215)
@@ -337,12 +338,11 @@ def to_crypt_decrypt_software():
     text_box_output_crypt_decrypt.place(x = 640, y = 50)
     button_menu.place(x = 10, y = 10)
 
-
 def crypt():
     global alph
     result = ""
     key = entry_key_crypt.get()
-    message = text_box_input_crypt_decypt.get("0.0", "end")
+    message = text_box_input_crypt_decrypt.get("0.0", "end")
     
     rd.seed(key)
     alphabet_shuffle = alph.copy()
@@ -356,12 +356,11 @@ def crypt():
         text_box_output_crypt_decrypt.delete("0.0", "end")
         text_box_output_crypt_decrypt.insert("0.0", result)
 
-
 def decrypt():
     global alph
     result = ""
     key = entry_key_crypt.get()
-    message = text_box_input_crypt_decypt.get("0.0", "end")
+    message = text_box_input_crypt_decrypt.get("0.0", "end")
     
     rd.seed(key)
     alphabet_shuffle = alph.copy()
@@ -374,7 +373,6 @@ def decrypt():
         
         text_box_output_crypt_decrypt.delete("0.0", "end")
         text_box_output_crypt_decrypt.insert("0.0", result)
-
 
 def to_pwd_gen():
     global return_modify_pwd, return_login, button_to_try_pwd, mdp
@@ -392,6 +390,7 @@ def to_pwd_gen():
     button_manage.place_forget()
     button_login_page.place_forget()
     button_menu.place(x = 10, y = 10)
+    option_menu_palet.place_forget()
     
     #? Random Password Generate
     switch.place(x = 255, y = 10)
@@ -412,7 +411,6 @@ def to_pwd_gen():
     button_gen.configure(state = "disabled")
     button_to_try_pwd = False
 
-
 def gen(lenght:int) -> str:
     global all
     min = "abcdefghijklmnopqrstuvwxyz"
@@ -429,14 +427,13 @@ def gen(lenght:int) -> str:
             mdp += num[rd.randint(0, len(num) - 1)]
     return mdp
 
-
 def try_pwd():
     global button_to_try_pwd
     if button_to_try_pwd == True:
         pwd_get = text_box_input_rpg.get(0.0, "end")
         try:
             pwd_get_test = int(pwd_get)
-            if len(pwd_get) > 1 and len(pwd_get) < 4:
+            if len(pwd_get) > 1 and len(pwd_get) < 10:
                 label_pwd_vulnerable.place_forget()
                 label_pwd_weak.place_forget()
                 label_pwd_strong.place_forget()
@@ -444,7 +441,7 @@ def try_pwd():
                 label_pin_strong.place_forget()
                 label_error_space_rpg.place_forget()
                 label_pin_vulnerable.place(relx = 0.5, anchor = "n", y = 70)
-            elif len(pwd_get) >= 4 and len(pwd_get) < 8:
+            elif len(pwd_get) >= 10 and len(pwd_get) < 15:
                 label_pwd_vulnerable.place_forget()
                 label_pwd_weak.place_forget()
                 label_pwd_strong.place_forget()
@@ -565,7 +562,6 @@ def try_pwd():
                 label_error_space_rpg.place_forget()
                 label_pin_strong.place(relx = 0.5, anchor = "n", y = 70)
 
-
 def pwd(input:int):
     global mdp
     mdp = gen(input)
@@ -573,14 +569,12 @@ def pwd(input:int):
     text_box_output_rpg.insert("0.0", mdp)
     try_pwd()
 
-
 def pin(input:int):
     global mdp
     mdp = gen(int(input))
     text_box_output_rpg.delete("0.0", "end")
     text_box_output_rpg.insert("0.0", mdp)
     try_pwd()
-
 
 def slider_event_rpg(value = 20):
     global input_rpg
@@ -590,7 +584,6 @@ def slider_event_rpg(value = 20):
         pwd(input_rpg)
     else:
         pin(input_rpg)
-
 
 def pwd_to_pin():
     global input_rpg
@@ -604,7 +597,6 @@ def pwd_to_pin():
     else:
         switch.configure(progress_color = text_color, button_color = secondary_color, button_hover_color = secondary_color_hover, fg_color = secondary_color, text = "PIN")
         pin(input_rpg)
-
 
 def to_try_pwd():
     global button_to_try_pwd
@@ -620,12 +612,12 @@ def to_try_pwd():
         label_input_rpg.place_forget()
         switch.place_forget()
         text_box_output_rpg.place_forget()
+        option_menu_palet.place_forget()
         text_box_input_rpg.place(relx = 0.5, anchor = "n", y = 210)
         button_gen.configure(state = "normal")
         button_to_try_pwd = True
     else:
         try_pwd()
-
 
 def to_manage_pwd():
     global return_modify_pwd, return_login, in_manage_pwd
@@ -642,6 +634,7 @@ def to_manage_pwd():
     button_manage.place_forget()
     button_login_page.place_forget()
     switch_language.place_forget()
+    option_menu_palet.place_forget()
     
     text_box_input_manage.place(x = 10, y = 40)
     button_menu.place(x = 10, y = 5)
@@ -650,6 +643,146 @@ def to_manage_pwd():
     text_box_input_manage.insert(0.0, input_manage.read())
     save()
 
+def change_palet(choice):
+    global primary_color, primary_color_hover, secondary_color, secondary_color_hover, text_color, text_color_hover
+    if choice == "Black":
+        primary_color = "#000000"
+        primary_color_hover = "#1a1a1a"
+        secondary_color = "#2b2b2b"
+        secondary_color_hover = "#3a3a3a"
+        text_color = "#ffffff"
+        text_color_hover = "#e8e8e8"
+    elif choice == "White":
+        primary_color = "#FFFFFF"
+        primary_color_hover = "#EDECEC"
+        secondary_color = "#DBDBDB"
+        secondary_color_hover = "#D3D3D3"
+        text_color="#000000"
+        text_color_hover="#4C4C4C"
+    elif choice == "Navy and Red":
+        primary_color = "#33365c"
+        primary_color_hover = "#242642"
+        secondary_color = "#b3193d"
+        secondary_color_hover = "#941835"
+        text_color = "#e7ffee"
+        text_color_hover = "#cccfcd"
+    elif choice == "Black and Red":
+        primary_color = "#1c1626"
+        primary_color_hover = "#38343e"
+        secondary_color = "#ff2961"
+        secondary_color_hover = "#db2252"
+        text_color = "#fefffb"
+        text_color_hover = "#e1e1e1"
+    elif choice == "Grey and Red":
+        primary_color = "#afbfd2"
+        primary_color_hover = "#9da8b6"
+        secondary_color = "#9e2835"
+        secondary_color_hover = "#bd3140"
+        text_color = "#ffffff"
+        text_color_hover = "#e8e8e8"
+    elif choice == "Blue and Brown":
+        primary_color = "#4396bf"
+        primary_color_hover = "#62acd0"
+        secondary_color = "#663733"
+        secondary_color_hover = "#7f4c48"
+        text_color = "#212133"
+        text_color_hover = "#424253"
+    elif choice == "Blue and Orange":
+        primary_color = "#272946"
+        primary_color_hover = "#404375"
+        secondary_color = "#eda031"
+        secondary_color_hover = "#d58f2b"
+        text_color = "#e7ffee"
+        text_color_hover = "#d5ecdc"
+    elif choice == "Black and Blue":
+        primary_color = "#08001f"
+        primary_color_hover = "#1a0066"
+        secondary_color = "#444d84"
+        secondary_color_hover = "#6570b3"
+        text_color = "#b2d5d1"
+        text_color_hover = "#9fbdba"
+    elif choice == "Green and Orange":
+        primary_color = "#314e52"
+        primary_color_hover = "#446c71"
+        secondary_color = "#f2a154"
+        secondary_color_hover = "#d8904b"
+        text_color = "#d3d3d3"
+        text_color_hover = "#c0c0c0"
+    elif choice == "White and Blue":
+        primary_color = "#fefff2"
+        primary_color_hover = "#edeee4"
+        secondary_color = "#8e9ce9"
+        secondary_color_hover = "#adb7ec"
+        text_color = "#10121c"
+        text_color_hover = "#3a3c47"
+    elif choice == "Blue and Yellow":
+        primary_color = "#174977"
+        primary_color_hover = "#113455"
+        secondary_color = "#ddab4f"
+        secondary_color_hover = "#c59640"
+        text_color = "#e9d5ba"
+        text_color_hover = "#c6b59d"
+    elif choice == "Burgundy and Black":
+        primary_color = "#6f0b3e"
+        primary_color_hover = "#4b082a"
+        secondary_color = "#232323"
+        secondary_color_hover = "#303030"
+        text_color = "#e5e5e5"
+        text_color_hover = "#d1d1d1"
+        primary_color = "#000000"
+        primary_color_hover = "#1a1a1a"
+        secondary_color = "#2b2b2b"
+        secondary_color_hover = "#3a3a3a"
+        text_color = "#ffffff"
+        text_color_hover = "#e8e8e8"
+    apply_changes()
+
+def apply_changes():
+    window.configure(fg_color=primary_color)
+    label_input.configure(text_color=text_color)
+    label_actual_pwd.configure(text_color=text_color)
+    label_new_pwd_1.configure(text_color=text_color)
+    label_new_pwd_2.configure(text_color=text_color)
+    label_input_crypt_decrypt.configure(text_color=text_color)
+    label_output.configure(text_color=text_color)
+    label_enter_key.configure(text_color=text_color)
+    label_input_rpg.configure(text_color=text_color)
+    label_val_slide.configure(text_color=text_color)
+    entry_actual_pwd.configure(border_color=text_color, fg_color=primary_color_hover, text_color=text_color)
+    entry_new_pwd_1.configure(border_color=text_color, fg_color=primary_color_hover, text_color=text_color)
+    entry_new_pwd_2.configure(border_color=text_color, fg_color=primary_color_hover, text_color=text_color)
+    entry_input.configure(border_color=text_color, fg_color=primary_color_hover, text_color=text_color)
+    entry_key_crypt.configure(border_color=text_color, fg_color=primary_color_hover, text_color=text_color)
+    button_login.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    button_new_pwd.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    button_back.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    button_modify.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    button_crypt.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    button_decrypt.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    button_gen.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    button_try_pwd.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    button_menu.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    button_pwd_gen.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    button_crypt_decrypt.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    button_manage.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    button_login_page.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    option_menu_palet.configure(fg_color=primary_color_hover, bg_color=primary_color, button_color=secondary_color, button_hover_color=secondary_color_hover, dropdown_fg_color=primary_color_hover, dropdown_hover_color=secondary_color, dropdown_text_color=text_color, text_color=text_color)
+    text_box_input_crypt_decrypt.configure(fg_color=primary_color_hover, border_color=text_color, text_color=text_color)
+    text_box_output_crypt_decrypt.configure(fg_color=primary_color_hover, border_color=text_color, text_color=text_color)
+    text_box_input_manage.configure(fg_color=primary_color_hover, border_color=text_color, text_color=text_color)
+    text_box_input_rpg.configure(fg_color=primary_color_hover, border_color=text_color, text_color=text_color)
+    text_box_output_rpg.configure(fg_color=primary_color_hover, border_color=text_color, text_color=text_color)
+    slider_rpg.configure(fg_color=primary_color_hover, border_color=text_color, button_color=text_color, button_hover_color=text_color_hover, progress_color=secondary_color)
+    switch.configure(progress_color=text_color, button_hover_color=text_color_hover, fg_color=secondary_color, button_color=text_color, text_color=text_color)
+    switch_language.configure(progress_color=text_color, button_hover_color=text_color_hover, fg_color=secondary_color, button_color=text_color, text_color=text_color)
+    for switch_name in switchs:
+        change_switch_color(switch_name)
+
+def change_switch_color(switch_name):
+    if switch_name.get() == 0:
+        switch_name.configure(button_color=text_color, button_hover_color=text_color_hover)
+    else:
+        switch_name.configure(button_color=secondary_color, button_hover_color=secondary_color_hover)
 
 def save():
     manage_text = open("manage.txt", "w")
@@ -657,10 +790,8 @@ def save():
     if in_manage_pwd == True:
         window.after(1000, save)
 
-
 def destroy():
     window.destroy()
-
 
 #? Vars
     #? Return Button
@@ -672,6 +803,8 @@ file_read = open("password.txt", "r")
 password = file_read.read()
 file_read.close()
 state_switch_language = False
+values = ["By default", "Black", "White", "Black and Red", "Grey and Red", "Blue and Brown", "Blue and Orange", "Black and Blue", "Green and Orange", "White and Blue", "Blue and Yellow", "Burgundy and Black"]
+values_fr = ["Par défault", "Noir", "Blanc", "Noir et Rouge", "Gris et Rouge", "Bleu et Marron", "Bleu et Orange", "Noir et Bleu", "Vert et Orange", "Blanc et Bleu", "Bleu et Jaune", "Vermillon et Noir"]
 
     #? Random Password Generator
 input_rpg = 20
@@ -686,7 +819,6 @@ alph.extend(carac_accent)
 
     #? Manage Passwords
 in_manage_pwd = False
-
 
 #? Login
     #? Labels
@@ -716,14 +848,13 @@ button_modify = ctk.CTkButton(window, width = 50, height = 50, command = modify_
     #? Switch
 switch_language = ctk.CTkSwitch(window, switch_height = 30, switch_width = 60, text = "English", corner_radius = 20, command = switch_languages, font = ("Trebuchet MS", 20), progress_color = text_color, button_hover_color = text_color_hover, fg_color = secondary_color)
 
-
     #? Menu
 button_menu = ctk.CTkButton(window, width = 10, corner_radius = 20, command = menu, text = "Menu", font = ("Trebuchet MS", 20), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color)
 button_pwd_gen = ctk.CTkButton(window, width = 370, height = 40, corner_radius = 30, command = to_pwd_gen, text = "Random Password Generator", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color, image = img_pwd_gen)
 button_crypt_decrypt = ctk.CTkButton(window, width = 370, height = 40, corner_radius = 30, command = to_crypt_decrypt_software, text = "Crypt / Decrytp Software", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color, image = img_crypt)
 button_manage = ctk.CTkButton(window, width = 370, height = 40, corner_radius = 30, command = to_manage_pwd, text = "Passwords Manager", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color, image = img_manage)
-button_login_page =ctk.CTkButton(window, width = 80, height = 50, corner_radius = 30, command = login_page, text = "Lock the session", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color)
-
+button_login_page = ctk.CTkButton(window, width = 80, height = 50, corner_radius = 30, command = login_page, text = "Lock the session", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color)
+option_menu_palet = ctk.CTkOptionMenu(window, width=70, height=30, corner_radius=20, font=("Trebuchet MS", 25), values=values, dropdown_font=("Trebuchet MS", 15), fg_color=primary_color_hover, bg_color=primary_color, button_color=secondary_color, button_hover_color=secondary_color_hover, dropdown_fg_color=primary_color_hover, dropdown_hover_color=secondary_color, dropdown_text_color=text_color, text_color=text_color, command=change_palet)
 
 #? Crypt Decrypt
     #? Labels
@@ -739,9 +870,8 @@ button_decrypt = ctk.CTkButton(window, width = 200, height = 100, corner_radius 
 entry_key_crypt = ctk.CTkEntry(window, width = 300, height = 80, corner_radius = 20, font = ("Arila", 25),border_width = 1, border_color = text_color, fg_color = primary_color_hover, text_color=text_color)
 
     #? Textebox
-text_box_input_crypt_decypt = ctk.CTkTextbox(window, width = 300, height = 400, corner_radius = 20, font = ("Trebuchet MS", 25), fg_color = primary_color_hover, border_color = text_color, border_width = 1, text_color = text_color)
+text_box_input_crypt_decrypt = ctk.CTkTextbox(window, width = 300, height = 400, corner_radius = 20, font = ("Trebuchet MS", 25), fg_color = primary_color_hover, border_color = text_color, border_width = 1, text_color = text_color)
 text_box_output_crypt_decrypt = ctk.CTkTextbox(window, width = 300, height = 400, corner_radius = 20, font = ("Trebuchet MS", 25), fg_color = primary_color_hover, border_color = text_color, border_width = 1, text_color = text_color)
-
 
 #? Random Password Generator
     #? Labels
@@ -769,11 +899,9 @@ slider_rpg = ctk.CTkSlider(window, width = 300, from_ = 1, to = 40, command = sl
     #? Switch
 switch = ctk.CTkSwitch(window, corner_radius = 20, command = pwd_to_pin, font = ("Trebuchet MS", 15), progress_color = text_color, button_hover_color = text_color_hover, fg_color = secondary_color, text = "Pwd")
 
-
 #? Manage Password
     #? Textbox
 text_box_input_manage = ctk.CTkTextbox(window, width = 780, height = 350, font = ("Trebuchet MS", 20), border_width = 1, border_color = text_color, fg_color = primary_color_hover, text_color = text_color)
-
 
 #? Places
 label_input.place(relx = 0.5, anchor = "n", y = 40)
@@ -781,12 +909,12 @@ entry_input.place(relx = 0.5, anchor = "n", y = 100)
 button_new_pwd.place(x = 100, y = 260)
 button_login.place(x = 440, y = 260)
 switch_language.place(x = 650, y = 10)
-
+option_menu_palet.place(x=10, y=10)
+switchs = [switch, switch_language]
 
 #? Bind
 window.bind("<Return>", lambda _:return_button())
 window.bind("<Escape>", lambda _: destroy())
-
 
 #? Mainloop
 window.mainloop()
