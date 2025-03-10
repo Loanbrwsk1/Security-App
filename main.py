@@ -352,7 +352,6 @@ def crypt():
         for j in range(len(alph)):
             if i == alph[j]:
                 result += alphabet_shuffle[j]
-        
         text_box_output_crypt_decrypt.delete("0.0", "end")
         text_box_output_crypt_decrypt.insert("0.0", result)
 
@@ -370,7 +369,6 @@ def decrypt():
         for j in range(len(alph)):
             if i == alphabet_shuffle[j]:
                 result += alph[j]
-        
         text_box_output_crypt_decrypt.delete("0.0", "end")
         text_box_output_crypt_decrypt.insert("0.0", result)
 
@@ -645,96 +643,90 @@ def to_manage_pwd():
 
 def change_palet(choice):
     global primary_color, primary_color_hover, secondary_color, secondary_color_hover, text_color, text_color_hover
-    if choice == "Black":
+    if choice == "Black" or choice == "Noir":
         primary_color = "#000000"
         primary_color_hover = "#1a1a1a"
         secondary_color = "#2b2b2b"
         secondary_color_hover = "#3a3a3a"
         text_color = "#ffffff"
         text_color_hover = "#e8e8e8"
-    elif choice == "White":
+    elif choice == "White" or choice == "Blanc":
         primary_color = "#FFFFFF"
         primary_color_hover = "#EDECEC"
         secondary_color = "#DBDBDB"
         secondary_color_hover = "#D3D3D3"
         text_color="#000000"
         text_color_hover="#4C4C4C"
-    elif choice == "Navy and Red":
+    elif choice == "By default" or choice == "Par défault":
         primary_color = "#33365c"
         primary_color_hover = "#242642"
         secondary_color = "#b3193d"
         secondary_color_hover = "#941835"
         text_color = "#e7ffee"
         text_color_hover = "#cccfcd"
-    elif choice == "Black and Red":
+    elif choice == "Black and Red" or choice == "Noir et Rouge":
         primary_color = "#1c1626"
         primary_color_hover = "#38343e"
         secondary_color = "#ff2961"
         secondary_color_hover = "#db2252"
         text_color = "#fefffb"
         text_color_hover = "#e1e1e1"
-    elif choice == "Grey and Red":
+    elif choice == "Grey and Red" or choice == "Gris et Rouge":
         primary_color = "#afbfd2"
         primary_color_hover = "#9da8b6"
         secondary_color = "#9e2835"
         secondary_color_hover = "#bd3140"
         text_color = "#ffffff"
         text_color_hover = "#e8e8e8"
-    elif choice == "Blue and Brown":
+    elif choice == "Blue and Brown" or choice == "Bleu et Marron":
         primary_color = "#4396bf"
         primary_color_hover = "#62acd0"
         secondary_color = "#663733"
         secondary_color_hover = "#7f4c48"
         text_color = "#212133"
         text_color_hover = "#424253"
-    elif choice == "Blue and Orange":
+    elif choice == "Blue and Orange" or choice == "Bleu et Orange":
         primary_color = "#272946"
         primary_color_hover = "#404375"
         secondary_color = "#eda031"
         secondary_color_hover = "#d58f2b"
         text_color = "#e7ffee"
         text_color_hover = "#d5ecdc"
-    elif choice == "Black and Blue":
+    elif choice == "Black and Blue" or choice == "Noir et Bleu":
         primary_color = "#08001f"
         primary_color_hover = "#1a0066"
         secondary_color = "#444d84"
         secondary_color_hover = "#6570b3"
         text_color = "#b2d5d1"
         text_color_hover = "#9fbdba"
-    elif choice == "Green and Orange":
+    elif choice == "Green and Orange" or choice == "Vert et Orange":
         primary_color = "#314e52"
         primary_color_hover = "#446c71"
         secondary_color = "#f2a154"
         secondary_color_hover = "#d8904b"
         text_color = "#d3d3d3"
         text_color_hover = "#c0c0c0"
-    elif choice == "White and Blue":
+    elif choice == "White and Blue" or choice == "Blanc et Bleu":
         primary_color = "#fefff2"
         primary_color_hover = "#edeee4"
         secondary_color = "#8e9ce9"
         secondary_color_hover = "#adb7ec"
         text_color = "#10121c"
         text_color_hover = "#3a3c47"
-    elif choice == "Blue and Yellow":
+    elif choice == "Blue and Yellow" or choice == "Bleu et Jaune":
         primary_color = "#174977"
         primary_color_hover = "#113455"
         secondary_color = "#ddab4f"
         secondary_color_hover = "#c59640"
         text_color = "#e9d5ba"
         text_color_hover = "#c6b59d"
-    elif choice == "Burgundy and Black":
+    elif choice == "Burgundy and Black" or choice == "Bordeaux et Noir":
         primary_color = "#6f0b3e"
         primary_color_hover = "#4b082a"
         secondary_color = "#232323"
         secondary_color_hover = "#303030"
         text_color = "#e5e5e5"
         text_color_hover = "#d1d1d1"
-        primary_color = "#000000"
-        primary_color_hover = "#1a1a1a"
-        secondary_color = "#2b2b2b"
-        secondary_color_hover = "#3a3a3a"
-        text_color = "#ffffff"
-        text_color_hover = "#e8e8e8"
     apply_changes()
 
 def apply_changes():
@@ -787,7 +779,7 @@ def change_switch_color(switch_name):
 def save():
     manage_text = open("manage.txt", "w")
     manage_text.write(text_box_input_manage.get(0.0, "end"))
-    if in_manage_pwd == True:
+    if in_manage_pwd:
         window.after(1000, save)
 
 def destroy():
@@ -795,7 +787,7 @@ def destroy():
 
 #? Vars
 values = ["By default", "Black", "White", "Black and Red", "Grey and Red", "Blue and Brown", "Blue and Orange", "Black and Blue", "Green and Orange", "White and Blue", "Blue and Yellow", "Burgundy and Black"]
-values_fr = ["Par défault", "Noir", "Blanc", "Noir et Rouge", "Gris et Rouge", "Bleu et Marron", "Bleu et Orange", "Noir et Bleu", "Vert et Orange", "Blanc et Bleu", "Bleu et Jaune", "Vermillon et Noir"]
+values_fr = ["Par défault", "Noir", "Blanc", "Noir et Rouge", "Gris et Rouge", "Bleu et Marron", "Bleu et Orange", "Noir et Bleu", "Vert et Orange", "Blanc et Bleu", "Bleu et Jaune", "Bordeaux et Noir"]
     
     #? Return Button
 return_login = True
