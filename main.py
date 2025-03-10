@@ -827,10 +827,10 @@ label_error_new_pwd_diff = ctk.CTkLabel(window, text = "The passwords are not th
 label_error_empty_pwd = ctk.CTkLabel(window, text = "The new password must not be empty !", text_color = "red", font = ("Trebuchet MS", 20))
 
     #? Entry
-entry_input = ctk.CTkEntry(window, width = 600, height = 100, corner_radius = 30, font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, fg_color = primary_color_hover, text_color = text_color)
-entry_actual_pwd = ctk.CTkEntry(window, width = 600, height = 75, corner_radius = 20,font = ("Trebuchet MS", 20), border_width = 1, border_color = text_color, fg_color = primary_color_hover, text_color = text_color)
-entry_new_pwd_1 = ctk.CTkEntry(window, width = 600, height = 75, corner_radius = 20,font = ("Trebuchet MS", 20), border_width = 1, border_color = text_color, fg_color = primary_color_hover, text_color = text_color)
-entry_new_pwd_2 = ctk.CTkEntry(window, width = 600, height = 75, corner_radius = 20,font = ("Trebuchet MS", 20), border_width = 1, border_color =text_color, fg_color = primary_color_hover, text_color = text_color)
+entry_input = ctk.CTkEntry(window, width = 600, height = 100, corner_radius = 30, font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, fg_color = primary_color_hover, text_color = text_color, show="•")
+entry_actual_pwd = ctk.CTkEntry(window, width = 600, height = 75, corner_radius = 20,font = ("Trebuchet MS", 20), border_width = 1, border_color = text_color, fg_color = primary_color_hover, text_color = text_color, show="•")
+entry_new_pwd_1 = ctk.CTkEntry(window, width = 600, height = 75, corner_radius = 20,font = ("Trebuchet MS", 20), border_width = 1, border_color = text_color, fg_color = primary_color_hover, text_color = text_color, show="•")
+entry_new_pwd_2 = ctk.CTkEntry(window, width = 600, height = 75, corner_radius = 20,font = ("Trebuchet MS", 20), border_width = 1, border_color =text_color, fg_color = primary_color_hover, text_color = text_color, show="•")
 
     #? Buttons
 button_login = ctk.CTkButton(window, width = 258, height = 60,command = login, corner_radius = 30,text = "Login", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color)
