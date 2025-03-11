@@ -151,7 +151,7 @@ class MenuPage:
         self.button_login_page = ctk.CTkButton(window, width = 80, height = 50, corner_radius = 30, command = self.to_login_page, text = "Lock the session", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color)
         self.button_crypt_decrypt = ctk.CTkButton(window, width = 370, height = 40, corner_radius = 30, command = self.to_crypt_decrypt_software, text = "Crypt / Decrytp Software", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color, image = img_crypt)
         self.button_pwd_gen = ctk.CTkButton(window, width = 370, height = 40, corner_radius = 30, command = self.to_pwd_gen, text = "Random Password Generator", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color, image = img_pwd_gen)
-        self.button_manage = ctk.CTkButton(window, width = 370, height = 40, corner_radius = 30, command = self.to_manage_pwd, text = "Passwords Manager", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color, image = img_manage)
+        self.button_manage = ctk.CTkButton(window, width = 370, height = 40, corner_radius = 30, command = self.to_manage_pwd, text = "Password Manager", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color, image = img_manage)
         
     def init(self):
         global locate
@@ -187,6 +187,8 @@ class MenuPage:
         random_password_generator_page.textbox.place_forget()
         random_password_generator_page.slider_rpg.place_forget()
         random_password_generator_page.button_menu.place_forget()
+        password_manager_page.textbox_manage.place_forget()
+        password_manager_page.button_menu.place_forget()
 
     def to_login_page(self):
         login_page.init()
@@ -355,7 +357,36 @@ class RandomPasswordGeneratorPage:
 
 class PasswordManagerPage:
     def __init__(self):
-        pass
+        self.textbox_manage = ctk.CTkTextbox(window, width = 780, height = 350, font = ("Trebuchet MS", 20), border_width = 1, border_color = text_color, fg_color = primary_color_hover, text_color = text_color)
+        self.button_menu = ctk.CTkButton(window, width = 10, corner_radius = 20, text = "Menu", command = self.to_menu_page, font = ("Trebuchet MS", 13), hover_color = secondary_color_hover, border_width = 1, border_color = text_color, fg_color = secondary_color, text_color = text_color)
+
+    def init(self):
+        global locate
+        window.title("Password Manager")
+        window.iconbitmap("./icons/icon-manage.ico")
+        locate = "password_manager_page"
+        menu_page.button_crypt_decrypt.place_forget()
+        menu_page.button_pwd_gen.place_forget()
+        menu_page.button_manage.place_forget()
+        menu_page.button_login_page.place_forget()
+        login_page.switch_language.place_forget()
+        login_page.option_menu_palet.place_forget()
+        self.textbox_manage.place(x = 10, y = 40)
+        self.button_menu.place(x = 10, y = 5)
+        content = open("manage.txt", "r")
+        self.textbox_manage.delete(0.0, "end")
+        self.textbox_manage.insert(0.0, content.read())
+        self.save()
+
+    def save(self):
+        manage_text = open("manage.txt", "w")
+        manage_text.write(self.textbox_manage.get(0.0, "end"))
+        if locate == "password_manager_page":
+            print("in")
+            window.after(1000, self.save)
+
+    def to_menu_page(self):
+        menu_page.init()
 
 
 #? Functions
@@ -364,8 +395,6 @@ def return_button():
         login_page.login()
     elif locate == "modify_pwd_page":
         modify_pwd_page.modify_pwd()
-    else:
-        print("bug")
 
 def change_palet(choice):
     global primary_color, primary_color_hover, secondary_color, secondary_color_hover, text_color, text_color_hover
@@ -492,6 +521,8 @@ def apply_changes():
     random_password_generator_page.textbox.configure(fg_color=primary_color_hover, border_color=text_color, text_color=text_color)
     random_password_generator_page.slider_rpg.configure(fg_color=primary_color_hover, button_color=text_color, button_hover_color=text_color_hover, progress_color=secondary_color)
     random_password_generator_page.button_menu.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    password_manager_page.textbox_manage.configure(fg_color=primary_color_hover, border_color=text_color, text_color=text_color)
+    password_manager_page.button_menu.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
 
 def change_switch_color(switch_name):
     if switch_name.get() == 0:
