@@ -11,18 +11,20 @@ import hashlib
 #? Class
 class LoginPage:
     def __init__(self):
-        self.values = ["By default", "Black", "White", "Black and Red", "Grey and Red", "Blue and Brown", "Blue and Orange", "Black and Blue", "Green and Orange", "White and Blue", "Blue and Yellow", "Burgundy and Black"]
-        self.values_fr = ["Par défault", "Noir", "Blanc", "Noir et Rouge", "Gris et Rouge", "Bleu et Marron", "Bleu et Orange", "Noir et Bleu", "Vert et Orange", "Blanc et Bleu", "Bleu et Jaune", "Bordeaux et Noir"]
-        self.label_input = ctk.CTkLabel(window, text="Input your password", font=("Trebuchet MS", 25), text_color=text_color)
-        self.label_error_login = ctk.CTkLabel(window, text="Wrong password !", text_color="red", font=("Trebuchet MS", 25))
+        self.label_input = ctk.CTkLabel(window, text=widgets_text[0], font=("Trebuchet MS", 25), text_color=text_color)
+        self.label_error_login = ctk.CTkLabel(window, text=widgets_text[1], text_color="red", font=("Trebuchet MS", 25))
         self.entry_input = ctk.CTkEntry(window, width=600, height=100, corner_radius=30, font=("Trebuchet MS", 25), border_width=1, border_color=text_color, fg_color = primary_color_hover, text_color = text_color, show="✱")
-        self.button_login = ctk.CTkButton(window, width = 258, height = 60, corner_radius = 30,text = "Login", font = ("Trebuchet MS", 25), border_width = 1, command=self.login, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color)
-        self.button_new_pwd = ctk.CTkButton( window, width = 50, height = 60, corner_radius = 30,text = "Modify your password", font = ("Trebuchet MS", 25), command=self.to_modify_pwd, border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color) 
-        self.switch_language = ctk.CTkSwitch(window, switch_height = 30, switch_width = 60, text = "English", corner_radius = 20, font = ("Trebuchet MS", 20), progress_color = text_color, button_hover_color = text_color_hover, fg_color = secondary_color)
-        self.option_menu_palet = ctk.CTkOptionMenu(window, width=70, height=30, corner_radius=20, values=self.values, font=("Trebuchet MS", 25), dropdown_font=("Trebuchet MS", 15), command=change_palet, fg_color=primary_color_hover, bg_color=primary_color, button_color=secondary_color, button_hover_color=secondary_color_hover, dropdown_fg_color=primary_color_hover, dropdown_hover_color=secondary_color, dropdown_text_color=text_color, text_color=text_color)
+        self.button_login = ctk.CTkButton(window, width = 258, height = 60, corner_radius = 30,text = widgets_text[2], font = ("Trebuchet MS", 25), border_width = 1, command=self.login, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color)
+        self.button_new_pwd = ctk.CTkButton( window, width = 50, height = 60, corner_radius = 30,text = widgets_text[3], font = ("Trebuchet MS", 25), command=self.to_modify_pwd, border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color) 
+        self.switch_language = ctk.CTkSwitch(window, switch_height = 30, switch_width = 60, text=widgets_text[4], corner_radius = 20, font = ("Trebuchet MS", 20), command=switch_language, progress_color = text_color, button_hover_color = text_color_hover, fg_color = secondary_color)
+        self.option_menu_palet = ctk.CTkOptionMenu(window, width=70, height=30, corner_radius=20, values=values_palet, font=("Trebuchet MS", 25), dropdown_font=("Trebuchet MS", 15), command=change_palet, fg_color=primary_color_hover, bg_color=primary_color, button_color=secondary_color, button_hover_color=secondary_color_hover, dropdown_fg_color=primary_color_hover, dropdown_hover_color=secondary_color, dropdown_text_color=text_color, text_color=text_color)
 
     def init(self):
+        global locate
         window.geometry("800x400")
+        window.title("Login")
+        window.iconbitmap("./icons/icon Login.ico")
+        locate = "login_page"
         modify_pwd_page.label_error_empty_pwd.place_forget()
         modify_pwd_page.label_actual_pwd.place_forget()
         modify_pwd_page.entry_actual_pwd.place_forget()
@@ -32,6 +34,12 @@ class LoginPage:
         modify_pwd_page.entry_new_pwd_2.place_forget()
         modify_pwd_page.button_back.place_forget()
         modify_pwd_page.button_modify.place_forget()
+        modify_pwd_page.entry_new_pwd_1.delete(0, 'end')
+        modify_pwd_page.entry_new_pwd_2.delete(0, 'end')
+        menu_page.button_login_page.place_forget()
+        menu_page.button_pwd_gen.place_forget()
+        menu_page.button_crypt_decrypt.place_forget()
+        menu_page.button_manage.place_forget()
         self.label_input.place(relx = 0.5, anchor = "n", y = 40)
         self.entry_input.place(relx = 0.5, anchor = "n", y = 100)
         self.button_new_pwd.place(x = 100, y = 260)
@@ -47,14 +55,17 @@ class LoginPage:
             self.button_new_pwd.place_forget()
             self.button_login.place_forget()
             self.label_error_login.place_forget()
-            # menu = Menu()
-            # menu.init()
+            self.to_menu()
+            self.entry_input.delete(0, "end")
         else:
             self.entry_input.delete(0, "end")
             self.label_error_login.place(x = 290, y = 210)
 
     def to_modify_pwd(self):
         modify_pwd_page.init()
+
+    def to_menu(self):
+        menu_page.init()
 
 
 class ModifyPwdPage:
@@ -73,7 +84,9 @@ class ModifyPwdPage:
         self.button_modify = ctk.CTkButton(window, width = 50, height = 50, corner_radius = 30,text = "Modify your password", font = ("Trebuchet MS", 20), command=self.modify_pwd, border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color)
 
     def init(self):
+        global locate
         window.geometry("800x550")
+        locate = "modify_pwd_page"
         login_page.option_menu_palet.place_forget()
         login_page.label_input.place_forget()
         login_page.entry_input.place_forget()
@@ -81,6 +94,9 @@ class ModifyPwdPage:
         login_page.button_login.place_forget()
         login_page.label_error_login.place_forget()
         self.label_error_empty_pwd.place_forget()
+        self.label_pwd_change_ok.place_forget()
+        self.label_error_actual_pwd_wrong.place_forget()
+        self.label_error_new_pwd_diff.place_forget()
         self.label_actual_pwd.place(x = 110, y = 10)
         self.entry_actual_pwd.place(relx = 0.5, anchor = "n", y = 55)
         self.label_new_pwd_1.place(x = 110, y = 140)
@@ -132,23 +148,224 @@ class ModifyPwdPage:
 
 class MenuPage:
     def __init__(self):
-        pass
+        self.button_login_page = ctk.CTkButton(window, width = 80, height = 50, corner_radius = 30, command = self.to_login_page, text = "Lock the session", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color)
+        self.button_crypt_decrypt = ctk.CTkButton(window, width = 370, height = 40, corner_radius = 30, command = self.to_crypt_decrypt_software, text = "Crypt / Decrytp Software", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color, image = img_crypt)
+        self.button_pwd_gen = ctk.CTkButton(window, width = 370, height = 40, corner_radius = 30, command = self.to_pwd_gen, text = "Random Password Generator", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color, image = img_pwd_gen)
+        self.button_manage = ctk.CTkButton(window, width = 370, height = 40, corner_radius = 30, command = self.to_manage_pwd, text = "Passwords Manager", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color, image = img_manage)
+        
+    def init(self):
+        global locate
+        window.geometry("800x400")
+        window.title("Menu")
+        window.iconbitmap("./icons/icon Menu.ico")
+        locate = "menu_page"
+        self.button_crypt_decrypt.place(relx = 0.5, anchor = "n", y = 60)
+        self.button_pwd_gen.place(relx = 0.5, anchor = "n", y = 140)
+        self.button_manage.place(relx = 0.5, anchor = "n", y = 220)
+        self.button_login_page.place(relx = 0.5, anchor = "n", y = 320)
+        login_page.switch_language.place(x = 650, y = 10)
+        login_page.option_menu_palet.place(x=10, y=10)
+        crypt_decrypt_page.label_input_crypt_decrypt.place_forget()
+        crypt_decrypt_page.label_output.place_forget()
+        crypt_decrypt_page.label_enter_key.place_forget()
+        crypt_decrypt_page.button_crypt.place_forget()
+        crypt_decrypt_page.button_decrypt.place_forget()
+        crypt_decrypt_page.entry_key_crypt.place_forget()
+        crypt_decrypt_page.textbox_input_crypt_decrypt.place_forget()
+        crypt_decrypt_page.textbox_output_crypt_decrypt.place_forget()
+        crypt_decrypt_page.button_menu.place_forget()
+        crypt_decrypt_page.entry_key_crypt.delete(0, 'end')
+        crypt_decrypt_page.textbox_input_crypt_decrypt.delete("0.0", 'end')
+        crypt_decrypt_page.textbox_output_crypt_decrypt.delete("0.0", 'end')
+        random_password_generator_page.label_input_rpg.place_forget()
+        random_password_generator_page.label_val_slide.place_forget()
+        random_password_generator_page.label_pwd_vulnerable.place_forget()
+        random_password_generator_page.label_pwd_weak.place_forget()
+        random_password_generator_page.label_pwd_strong.place_forget()
+        random_password_generator_page.button_gen.place_forget()
+        random_password_generator_page.button_try_pwd.place_forget()
+        random_password_generator_page.textbox.place_forget()
+        random_password_generator_page.slider_rpg.place_forget()
+        random_password_generator_page.button_menu.place_forget()
+
+    def to_login_page(self):
+        login_page.init()
+
+    def to_crypt_decrypt_software(self):
+        crypt_decrypt_page.init()
+
+    def to_pwd_gen(self):
+        random_password_generator_page.init()
+
+    def to_manage_pwd(self):
+        password_manager_page.init()
 
 
 class CryptDecryptPage:
     def __init__(self):
-        pass
+        self.label_input_crypt_decrypt = ctk.CTkLabel(window, width = 100, height = 25, corner_radius = 20, text = "Input", font = ("Trebuchet MS", 25), text_color = text_color)
+        self.label_output = ctk.CTkLabel(window, width = 100, height = 25, corner_radius = 20, text = "Output", font = ("Trebuchet MS", 25), text_color = text_color)
+        self.label_enter_key = ctk.CTkLabel(window, text = "Put a key here", font = ("Trebuchet MS", 25), text_color = text_color)
+        self.button_crypt = ctk.CTkButton(window, width = 200, height = 100, corner_radius = 20, text = "Crypt", command = self.crypt, font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color)
+        self.button_decrypt = ctk.CTkButton(window, width = 200, height = 100, corner_radius = 20, text = "Decrypt", command = self.decrypt, font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color)
+        self.entry_key_crypt = ctk.CTkEntry(window, width = 300, height = 80, corner_radius = 20, font = ("Arila", 25),border_width = 1, border_color = text_color, fg_color = primary_color_hover, text_color=text_color)
+        self.textbox_input_crypt_decrypt = ctk.CTkTextbox(window, width = 300, height = 400, corner_radius = 20, font = ("Trebuchet MS", 25), fg_color = primary_color_hover, border_color = text_color, border_width = 1, text_color = text_color)
+        self.textbox_output_crypt_decrypt = ctk.CTkTextbox(window, width = 300, height = 400, corner_radius = 20, font = ("Trebuchet MS", 25), fg_color = primary_color_hover, border_color = text_color, border_width = 1, text_color = text_color)
+        self.button_menu = ctk.CTkButton(window, width = 10, corner_radius = 20, command = self.to_menu_page, text = "Menu", font = ("Trebuchet MS", 20), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color)
+
+    def init(self):
+        global locate
+        window.geometry("950x460")
+        window.title("Crypt / Decrypt")
+        window.iconbitmap("./Icons/icon Crypt Decrypt.ico")
+        locate = "crypt_decrypt_page"
+        menu_page.button_login_page.place_forget()
+        menu_page.button_crypt_decrypt.place_forget()
+        menu_page.button_pwd_gen.place_forget()
+        menu_page.button_manage.place_forget()
+        login_page.switch_language.place_forget()
+        login_page.option_menu_palet.place_forget()
+        self.label_input_crypt_decrypt.place(x = 102, y = 10)
+        self.textbox_input_crypt_decrypt.place(x = 10, y = 50)
+        self.button_crypt.place(relx = 0.5, anchor = "n", y = 50)
+        self.label_enter_key.place(relx = 0.5, anchor = "n", y = 180)
+        self.entry_key_crypt.place(relx = 0.5, anchor = "n", y = 215)
+        self.button_decrypt.place(relx = 0.5, anchor = "n", y = 345)
+        self.label_output.place(x = 738, y = 10)
+        self.textbox_output_crypt_decrypt.place(x = 640, y = 50)
+        self.button_menu.place(x = 10, y = 10)
+        
+    def crypt(self):
+        global alph
+        result = ""
+        key = self.entry_key_crypt.get()
+        message = self.textbox_input_crypt_decrypt.get("0.0", "end")
+        random.seed(key)
+        alphabet_shuffle = alph.copy()
+        random.shuffle(alphabet_shuffle)
+        for i in message:
+            for j in range(len(alph)):
+                if i == alph[j]:
+                    result += alphabet_shuffle[j]
+            self.textbox_output_crypt_decrypt.delete("0.0", "end")
+            self.textbox_output_crypt_decrypt.insert("0.0", result)
+
+    def decrypt(self):
+        global alph
+        result = ""
+        key = self.entry_key_crypt.get()
+        message = self.textbox_input_crypt_decrypt.get("0.0", "end")
+        random.seed(key)
+        alphabet_shuffle = alph.copy()
+        random.shuffle(alphabet_shuffle)
+        for i in message:
+            for j in range(len(alph)):
+                if i == alphabet_shuffle[j]:
+                    result += alph[j]
+            self.textbox_output_crypt_decrypt.delete("0.0", "end")
+            self.textbox_output_crypt_decrypt.insert("0.0", result)
+
+    def to_menu_page(self):
+        menu_page.init()
 
 
 class RandomPasswordGeneratorPage:
     def __init__(self):
-        pass
+        self.label_input_rpg = ctk.CTkLabel(window, width = 10, height = 30, text = "Input the lenght of your password", font = ("Trebuchet MS", 20), text_color = text_color)
+        self.label_val_slide = ctk.CTkLabel(window, width = 50, height = 25, corner_radius = 20, text = "20", font = ("Trebuchet MS", 20), text_color = text_color)
+        self.label_pwd_vulnerable = ctk.CTkLabel(window, text = "Password vulnerable !", text_color = "red", font = ("Trebuchet MS", 20))
+        self.label_pwd_weak = ctk.CTkLabel(window, text = "Password weak !", text_color = "orange", font = ("Trebuchet MS", 20))
+        self.label_pwd_strong = ctk.CTkLabel(window, text = "Password strong !", text_color = "green", font = ("Trebuchet MS", 20))
+        self.button_gen = ctk.CTkButton(window, height = 40, corner_radius = 30, text = "Generate a\npassword", command = self.action_gen_button, font = ("Trebuchet MS", 13), hover_color = secondary_color_hover, border_width = 1, border_color = text_color, fg_color = secondary_color, text_color = text_color)
+        self.button_try_pwd = ctk.CTkButton(window, height = 40, corner_radius = 30, text = "Test the efficiency\nof your password", command = self.action_test_button, font = ("Trebuchet MS", 13), hover_color = secondary_color_hover, border_width = 1, border_color = text_color, fg_color = secondary_color, text_color = text_color)
+        self.textbox = ctk.CTkTextbox(window, width = 300, height = 93, corner_radius = 20, font = ("Trebuchet MS", 20), border_width = 1, border_color = text_color, fg_color = primary_color_hover, text_color = text_color)
+        self.slider_rpg = ctk.CTkSlider(window, width = 300, from_ = 1, to = 40, command = self.slider_event_rpg, button_hover_color = secondary_color_hover, fg_color = secondary_color, button_color = secondary_color)
+        self.button_menu = ctk.CTkButton(window, width = 10, corner_radius = 20, text = "Menu", command = self.to_menu_page, font = ("Trebuchet MS", 13), hover_color = secondary_color_hover, border_width = 1, border_color = text_color, fg_color = secondary_color, text_color = text_color)
+
+    def init(self):
+        global locate
+        window.iconbitmap("./icons/icon-pwd-gen.ico")
+        window.geometry("328x310")
+        locate = "pwd_gen_page"
+        menu_page.button_crypt_decrypt.place_forget()
+        menu_page.button_pwd_gen.place_forget()
+        menu_page.button_manage.place_forget()
+        menu_page.button_login_page.place_forget()
+        login_page.option_menu_palet.place_forget()
+        self.button_menu.place(x = 10, y = 10)
+        self.label_input_rpg.place(relx = 0.5, anchor = "n", y = 40)
+        self.slider_rpg.place(relx = 0.5, anchor = "n", y = 100)
+        self.label_val_slide.place(relx = 0.5, anchor = "n", y = 123)
+        self.button_gen.place(x = 15, y = 153)
+        self.textbox.place(relx = 0.5, anchor = "n", y = 210)
+        self.button_try_pwd.place(x = 160, y = 153)
+        self.label_pwd_strong.place_forget()
+        self.label_pwd_vulnerable.place_forget()
+        self.label_pwd_weak.place_forget()
+
+    def action_gen_button(self):
+        pwd = self.gen(int(self.slider_rpg.get()))
+        self.textbox.delete("0.0", "end")
+        self.textbox.insert("0.0", pwd)
+
+    def action_test_button(self):
+        pwd = self.textbox.get("0.0", "end")
+        self.try_pwd(pwd.replace("\n", ""))
+
+    def try_pwd(self, pwd):
+        pwd_score = 0
+        dico = {}
+        for char in all:
+            if char in min or char in maj:
+                dico[char] = 1
+            elif char in num:
+                dico[char] = 2
+            elif char in symbols:
+                dico[char] = 3
+        for char in pwd:
+            pwd_score += dico[char]
+        if pwd_score <= 10 or len(pwd) < 15:
+            self.label_pwd_strong.place_forget()
+            self.label_pwd_weak.place_forget()
+            self.label_pwd_vulnerable.place(relx = 0.5, anchor = "n", y = 70)
+        elif 10 > pwd_score <= 20 or 15 >= len(pwd) < 20:
+            self.label_pwd_strong.place_forget()
+            self.label_pwd_vulnerable.place_forget()
+            self.label_pwd_weak.place(relx = 0.5, anchor = "n", y = 70)
+        elif pwd_score > 20 or len(pwd) >= 20:
+            self.label_pwd_vulnerable.place_forget()
+            self.label_pwd_weak.place_forget()
+            self.label_pwd_strong.place(relx = 0.5, anchor = "n", y = 70)
+
+    def gen(self, lenght:int) -> str:
+        pwd = ""
+        for _ in range(lenght):
+            pwd += all[random.randint(0, len(all) - 1)]
+        self.try_pwd(pwd)
+        return pwd
+
+    def slider_event_rpg(self, value=20):
+        self.label_val_slide.configure(text=int(value))
+        self.textbox.delete("0.0", "end")
+        self.textbox.insert("0.0", self.gen(int(value)))
+
+    def to_menu_page(self):
+        menu_page.init()
 
 
-class PasswordsManagerPage:
+class PasswordManagerPage:
     def __init__(self):
         pass
 
+
+#? Functions
+def return_button():
+    if locate == "login_page":
+        login_page.login()
+    elif locate == "modify_pwd_page":
+        modify_pwd_page.modify_pwd()
+    else:
+        print("bug")
 
 def change_palet(choice):
     global primary_color, primary_color_hover, secondary_color, secondary_color_hover, text_color, text_color_hover
@@ -255,35 +472,55 @@ def apply_changes():
     modify_pwd_page.entry_new_pwd_2.configure(border_color=text_color, fg_color=primary_color_hover, text_color=text_color) 
     modify_pwd_page.button_back.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
     modify_pwd_page.button_modify.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
-
-    # label_input_crypt_decrypt.configure(text_color=text_color)
-    # label_output.configure(text_color=text_color)
-    # label_enter_key.configure(text_color=text_color)
-    # label_input_rpg.configure(text_color=text_color)
-    # label_val_slide.configure(text_color=text_color)
-    # entry_key_crypt.configure(border_color=text_color, fg_color=primary_color_hover, text_color=text_color)
-    # button_crypt.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
-    # button_decrypt.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
-    # button_gen.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
-    # button_try_pwd.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
-    # button_menu.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
-    # button_pwd_gen.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
-    # button_crypt_decrypt.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
-    # button_manage.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
-    # button_login_page.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
-    # text_box_input_crypt_decrypt.configure(fg_color=primary_color_hover, border_color=text_color, text_color=text_color)
-    # text_box_output_crypt_decrypt.configure(fg_color=primary_color_hover, border_color=text_color, text_color=text_color)
-    # text_box_input_manage.configure(fg_color=primary_color_hover, border_color=text_color, text_color=text_color)
-    # text_box_input_rpg.configure(fg_color=primary_color_hover, border_color=text_color, text_color=text_color)
-    # text_box_output_rpg.configure(fg_color=primary_color_hover, border_color=text_color, text_color=text_color)
-    # slider_rpg.configure(fg_color=primary_color_hover, button_color=text_color, button_hover_color=text_color_hover, progress_color=secondary_color)
-    # switch.configure(progress_color=text_color, button_hover_color=text_color_hover, fg_color=secondary_color, button_color=text_color, text_color=text_color)
+    menu_page.button_login_page.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    menu_page.button_pwd_gen.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    menu_page.button_crypt_decrypt.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    menu_page.button_manage.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    crypt_decrypt_page.label_input_crypt_decrypt.configure(text_color=text_color)
+    crypt_decrypt_page.label_output.configure(text_color=text_color)
+    crypt_decrypt_page.label_enter_key.configure(text_color=text_color)
+    crypt_decrypt_page.button_crypt.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    crypt_decrypt_page.button_decrypt.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    crypt_decrypt_page.button_menu.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    crypt_decrypt_page.entry_key_crypt .configure(border_color=text_color, fg_color=primary_color_hover, text_color=text_color)
+    crypt_decrypt_page.textbox_input_crypt_decrypt.configure(fg_color=primary_color_hover, border_color=text_color, text_color=text_color)
+    crypt_decrypt_page.textbox_output_crypt_decrypt.configure(fg_color=primary_color_hover, border_color=text_color, text_color=text_color)
+    random_password_generator_page.label_input_rpg.configure(text_color=text_color)
+    random_password_generator_page.label_val_slide.configure(text_color=text_color)
+    random_password_generator_page.button_gen.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    random_password_generator_page.button_try_pwd.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
+    random_password_generator_page.textbox.configure(fg_color=primary_color_hover, border_color=text_color, text_color=text_color)
+    random_password_generator_page.slider_rpg.configure(fg_color=primary_color_hover, button_color=text_color, button_hover_color=text_color_hover, progress_color=secondary_color)
+    random_password_generator_page.button_menu.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
 
 def change_switch_color(switch_name):
     if switch_name.get() == 0:
         switch_name.configure(button_color=text_color, button_hover_color=text_color_hover)
     else:
         switch_name.configure(button_color=secondary_color, button_hover_color=secondary_color_hover)
+
+def switch_language():
+    global values_palet, index, widgets_text
+    if login_page.switch_language.get() == 0:
+        index = values_palet.index(login_page.option_menu_palet.get())
+        values_palet = ["By default", "Black", "White", "Black and Red", "Grey and Red", "Blue and Brown", "Blue and Orange", "Black and Blue", "Green and Orange", "White and Blue", "Blue and Yellow", "Burgundy and Black"]
+        widgets_text = ["Input your password", "Wrong password !", "Login", "Modify your password", "English"]
+    elif login_page.switch_language.get() == 1:
+        index = values_palet.index(login_page.option_menu_palet.get())
+        values_palet = ["Par défault", "Noir", "Blanc", "Noir et Rouge", "Gris et Rouge", "Bleu et Marron", "Bleu et Orange", "Noir et Bleu", "Vert et Orange", "Blanc et Bleu", "Bleu et Jaune", "Bordeaux et Noir"]
+        widgets_text = ["Entrez votre mot de passe", "Mauvais mot de passe", "Se connecter", "Modifier votre mot de\npasse", "Français"]
+    apply_changes_language()
+    change_switch_color(login_page.switch_language)
+
+def apply_changes_language():
+    login_page.switch_language.configure(text=widgets_text[4])
+    login_page.option_menu_palet.configure(values=values_palet)
+    login_page.option_menu_palet.set(values_palet[index])
+    login_page.label_input.configure(text=widgets_text[0])
+    login_page.label_error_login.configure(text=widgets_text[1])
+    login_page.button_login.configure(text=widgets_text[2])
+    login_page.button_new_pwd.configure(text=widgets_text[3])
+    login_page.switch_language.configure(text=widgets_text[4])
 
 def destroy():
     window.destroy()
@@ -292,13 +529,13 @@ def destroy():
 if __name__ == "__main__":
 
     #? Appearance
+    ctk.set_appearance_mode("dark")
     primary_color = "#33365c"
     primary_color_hover = "#242642"
     secondary_color = "#b3193d"
     secondary_color_hover = "#941835"
     text_color = "#e7ffee"
     text_color_hover = "#cccfcd"
-    ctk.set_appearance_mode("dark")
 
     #? Window
     window = ctk.CTk()
@@ -308,18 +545,42 @@ if __name__ == "__main__":
     window.configure(background = "black", fg_color = primary_color)
     window.resizable(width = False, height = False)
 
-    img_pwd_gen = ctk.CTkImage(light_image = Image.open("./icons/icon pwd-gen.png"), size = (30, 30))
-    img_crypt = ctk.CTkImage(light_image = Image.open("./icons/icon Crypt Decrypt.ico"), size = (30, 30))
-    img_manage = ctk.CTkImage(light_image = Image.open("./icons/icon manage.png"), size = (30, 30))
+    #? Vars
+    img_pwd_gen = ctk.CTkImage(light_image=Image.open("./icons/icon pwd-gen.png"), size=(30, 30))
+    img_crypt = ctk.CTkImage(light_image=Image.open("./icons/icon Crypt Decrypt.ico"), size=(30, 30))
+    img_manage = ctk.CTkImage(light_image=Image.open("./icons/icon manage.png"), size=(30, 30))
 
-    login_page = LoginPage()
-    modify_pwd_page = ModifyPwdPage()
-    login_page.init()
+    values_palet = ["By default", "Black", "White", "Black and Red", "Grey and Red", "Blue and Brown", "Blue and Orange", "Black and Blue", "Green and Orange", "White and Blue", "Blue and Yellow", "Burgundy and Black"]
+    locate = "login_page"
+    widgets_text = ["Input your password", "Wrong password !", "Login", "Modify your password", "English"]
+
+    alph = []
+    for i in range(32, 127):
+        alph.append(chr(i))
+    carac_accent = ["€", "é", "è", "ê", "ë", "à", "â", "ù", "û", "ü", "ô", "î", "ç"]
+    alph.extend(carac_accent)
+
+    min = "abcdefghijklmnopqrstuvwxyz"
+    maj = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    num = "0123456789"
+    symbols = "{}()[]/|.!?,;:+-*%^=€$£_&#@ "
+    all = min + maj + num + symbols
+
     file_read = open("password.txt", "r")
     password = file_read.read()
     file_read.close()
 
-    window.bind("<Return>", lambda _:login_page.login())
+    login_page = LoginPage()
+    modify_pwd_page = ModifyPwdPage()
+    menu_page = MenuPage()
+    crypt_decrypt_page = CryptDecryptPage()
+    random_password_generator_page = RandomPasswordGeneratorPage()
+    password_manager_page = PasswordManagerPage()
+    login_page.init()
+
+    #? Binds
+    window.bind("<Return>", lambda _:return_button())
     window.bind("<Escape>", lambda _: destroy())
 
+    #? Mainloop
     window.mainloop()
