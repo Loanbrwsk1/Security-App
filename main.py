@@ -841,7 +841,7 @@ button_modify = ctk.CTkButton(window, width = 50, height = 50, command = modify_
     #? Switch
 switch_language = ctk.CTkSwitch(window, switch_height = 30, switch_width = 60, text = "English", corner_radius = 20, command = switch_languages, font = ("Trebuchet MS", 20), progress_color = text_color, button_hover_color = text_color_hover, fg_color = secondary_color)
 
-    #? Menu
+#? Menu
 button_menu = ctk.CTkButton(window, width = 10, corner_radius = 20, command = menu, text = "Menu", font = ("Trebuchet MS", 20), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color)
 button_pwd_gen = ctk.CTkButton(window, width = 370, height = 40, corner_radius = 30, command = to_pwd_gen, text = "Random Password Generator", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color, image = img_pwd_gen)
 button_crypt_decrypt = ctk.CTkButton(window, width = 370, height = 40, corner_radius = 30, command = to_crypt_decrypt_software, text = "Crypt / Decrytp Software", font = ("Trebuchet MS", 25), border_width = 1, border_color = text_color, hover_color = secondary_color_hover, fg_color = secondary_color, text_color = text_color, image = img_crypt)
