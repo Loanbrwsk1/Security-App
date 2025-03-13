@@ -243,6 +243,7 @@ class CryptDecryptPage:
         result = ""
         key = self.entry_key_crypt.get()
         message = self.textbox_input_crypt_decrypt.get("0.0", "end")
+        message = message[:-1]
         random.seed(key)
         alphabet_shuffle = alph.copy()
         random.shuffle(alphabet_shuffle)
@@ -257,6 +258,7 @@ class CryptDecryptPage:
         result = ""
         key = self.entry_key_crypt.get()
         message = self.textbox_input_crypt_decrypt.get("0.0", "end")
+        message = message[:-1]
         random.seed(key)
         alphabet_shuffle = alph.copy()
         random.shuffle(alphabet_shuffle)
@@ -373,7 +375,8 @@ class PasswordsManagerPage:
         self.save()
 
     def save(self)-> None:
-        datas.manager = self.crypt(self.textbox_manage.get(0.0, "end"), datas.password)
+        content = self.textbox_manage.get(0.0, "end")
+        datas.manager = self.crypt(content[:-1], datas.password)
         datas.save()
         if locate == "passwords_manager_page":
             window.after(1000, self.save)
