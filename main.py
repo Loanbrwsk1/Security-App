@@ -108,10 +108,11 @@ class ModifyPwdPage:
         self.button_modify.place(x = 700, anchor = "ne", y = 440)
 
     def modify_pwd(self)-> None:
-        global password
+        global password, actual_pwd
         actual = self.entry_actual_pwd.get()
         new_pwd_1 = self.entry_new_pwd_1.get()
         new_pwd_2 = self.entry_new_pwd_2.get()
+        actual_pwd = hashlib.md5(actual.encode()).hexdigest()
         if hashlib.md5(actual.encode()).hexdigest() == password:
             if hashlib.md5(new_pwd_1.encode()).hexdigest() == hashlib.md5(new_pwd_2.encode()).hexdigest():
                 if new_pwd_1 != "":
@@ -137,6 +138,7 @@ class ModifyPwdPage:
             self.label_error_empty_pwd.place_forget()
             login_page.label_error_login.place_forget()
             self.label_error_actual_pwd_wrong.place(relx = 0.5, anchor = "n", y = 395)
+        passwords_manager_page.password_changed()
 
     def write_pwd(self, pwd:str)-> None:
         datas.password = pwd
@@ -238,7 +240,6 @@ class CryptDecryptPage:
         self.button_menu.place(x = 10, y = 10)
         
     def crypt(self)-> None:
-        global alph
         result = ""
         key = self.entry_key_crypt.get()
         message = self.textbox_input_crypt_decrypt.get("0.0", "end")
@@ -253,7 +254,6 @@ class CryptDecryptPage:
             self.textbox_output_crypt_decrypt.insert("0.0", result)
 
     def decrypt(self)-> None:
-        global alph
         result = ""
         key = self.entry_key_crypt.get()
         message = self.textbox_input_crypt_decrypt.get("0.0", "end")
@@ -368,16 +368,43 @@ class PasswordsManagerPage:
         login_page.option_menu_palet.place_forget()
         menu_page.button_menu.place(x = 10, y = 5)
         self.textbox_manage.place(x = 10, y = 40)
-        content = open("manage.txt", "r")
         self.textbox_manage.delete(0.0, "end")
-        self.textbox_manage.insert(0.0, content.read())
+        self.textbox_manage.insert(0.0, self.decrypt(datas.manager, datas.password))
         self.save()
 
     def save(self)-> None:
-        manage_text=open("manage.txt", "w")
-        manage_text.write(self.textbox_manage.get(0.0, "end"))
+        datas.manager = self.crypt(self.textbox_manage.get(0.0, "end"), datas.password)
+        datas.save()
         if locate == "passwords_manager_page":
             window.after(1000, self.save)
+
+    def crypt(self, message:str, key:str)-> str:
+        result = ""
+        random.seed(key)
+        alphabet_shuffle = alph.copy()
+        random.shuffle(alphabet_shuffle)
+        for i in message:
+            for j in range(len(alph)):
+                if i == alph[j]:
+                    result += alphabet_shuffle[j]
+        return result
+
+    def decrypt(self, message:str,  key:str)-> str:
+        result = ""
+        random.seed(key)
+        alphabet_shuffle = alph.copy()
+        random.shuffle(alphabet_shuffle)
+        for i in message:
+            for j in range(len(alph)):
+                if i == alphabet_shuffle[j]:
+                    result += alph[j]
+        return result
+
+    def password_changed(self):
+        actual_content = passwords_manager_page.decrypt(datas.manager, actual_pwd)
+        new_content = passwords_manager_page.crypt(actual_content, password)
+        datas.manager = new_content
+        passwords_manager_page.save()
 
     def to_menu_page(self)-> None:
         menu_page.init()
@@ -390,6 +417,7 @@ class Datas:
         self.palet = self.file["Palet"]
         self.language = self.file["Language"]
         self.password = self.file["Password"]
+        self.manager = self.file["Passwords Manager"]
 
     def load(self)-> None:
         global widgets_text, values_palet
@@ -402,7 +430,7 @@ class Datas:
             ["Input", "Output", "Put a key here", "Crypt", "Decrypt"],
             ["Input the lenght of your password", "Password vulnerable !", "Password weak !", "Password strong !", "Generate a\npassword", "Test the efficiency\nof your password"]]
         else:
-            values_palet = ["Par défault", "Sombre", "Clair", "Noir et Rouge", "Gris et Rouge", "Bleu et Marron", "Bleu et Orange", "Noir et Bleu", "Vert et Orange", "Blanc et Bleu", "Bleu et Jaune", "Bordeaux et Noir"]
+            values_palet = ["Par default", "Sombre", "Clair", "Noir et Rouge", "Gris et Rouge", "Bleu et Marron", "Bleu et Orange", "Noir et Bleu", "Vert et Orange", "Blanc et Bleu", "Bleu et Jaune", "Bordeaux et Noir"]
             widgets_text=[["Entrez votre mot de passe", "Mauvais mot de passe", "Se connecter", "Modifier votre mot de\npasse", "Français"], 
             ["Mot de passe actuel", "Entrez votre nouveau mot de passe", "Confirmez votre mot de passe", "Mot de passe modifié avec succès !", "Le mot de passe actuel est incorrect !", "Les mots de passe ne sont pas les mêmes !", "Le nouveau mot de passe ne doit pas être vide !", "Retour", "Modifier votre mot de passe"],
             ["Verrouiller la session", "Application de Chiffrage / Déchiffrage", "Générateur de Mots de Passe Aléatoire", "Gestionnaire de Mot de Passe"],
@@ -410,7 +438,7 @@ class Datas:
             ["Entrez la longueur de votre mot de\npasse", "Mot de passe vulnérable !", "Mot de passe faible !", "Mot de passe fort !", "Générer un\nmot de passe", "Tester l'efficacité de\nvotre mot de passe"]]
 
     def save(self)-> None:
-        datas_to_save = {"Palet":self.palet, "Language":self.language, "Password":self.password}
+        datas_to_save = {"Palet":self.palet, "Language":self.language, "Password":self.password, "Passwords Manager":self.manager}
         with open("user_data.json", "w") as file:
             json.dump(datas_to_save, file)
 
@@ -439,7 +467,7 @@ def change_palet(choice:str)-> None:
         secondary_color_hover = "#D3D3D3"
         text_color="#000000"
         text_color_hover="#4C4C4C"
-    elif choice == "By default" or choice == "Par défault":
+    elif choice == "By default" or choice == "Par default":
         primary_color = "#33365c"
         primary_color_hover = "#242642"
         secondary_color = "#b3193d"
@@ -573,7 +601,7 @@ def switch_language()-> None:
     elif login_page.switch_language.get() == 1:
         datas.language = "fr"
         index = values_palet.index(login_page.option_menu_palet.get())
-        values_palet = ["Par défault", "Sombre", "Clair", "Noir et Rouge", "Gris et Rouge", "Bleu et Marron", "Bleu et Orange", "Noir et Bleu", "Vert et Orange", "Blanc et Bleu", "Bleu et Jaune", "Bordeaux et Noir"]
+        values_palet = ["Par default", "Sombre", "Clair", "Noir et Rouge", "Gris et Rouge", "Bleu et Marron", "Bleu et Orange", "Noir et Bleu", "Vert et Orange", "Blanc et Bleu", "Bleu et Jaune", "Bordeaux et Noir"]
         widgets_text=[["Entrez votre mot de passe", "Mauvais mot de passe", "Se connecter", "Modifier votre mot de\npasse", "Français"], 
                         ["Mot de passe actuel", "Entrez votre nouveau mot de passe", "Confirmez votre mot de passe", "Mot de passe modifié avec succès !", "Le mot de passe actuel est incorrect !", "Les mots de passe ne sont pas les mêmes !", "Le nouveau mot de passe ne doit pas être vide !", "Retour", "Modifier votre mot de passe"],
                         ["Verrouiller la session", "Application de Chiffrage / Déchiffrage", "Générateur de Mots de Passe Aléatoire", "Gestionnaire de Mot de Passe"],
@@ -650,7 +678,7 @@ if __name__ == "__main__":
     alph = []
     for i in range(32, 127):
         alph.append(chr(i))
-    alph.extend(["€", "é", "è", "ê", "ë", "à", "â", "ù", "û", "ü", "ô", "î", "ç"])
+    alph.extend(["€", "é", "è", "ê", "ë", "à", "â", "ù", "û", "ü", "ô", "î", "ç", "\n"])
 
     min = "abcdefghijklmnopqrstuvwxyz"
     maj = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
