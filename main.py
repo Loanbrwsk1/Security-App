@@ -323,19 +323,20 @@ class RandomPasswordGeneratorPage:
                 dico[char] = 1
             elif char in num:
                 dico[char] = 2
-            elif char in symbols:
-                dico[char] = 3
         for char in pwd:
-            pwd_score += dico[char]
-        if pwd_score <= 10 or len(pwd) < 15:
+            pwd_score += dico[char] if char in dico else 3
+        pwd_score *= len(pwd)
+        random_password_generator_page.slider_rpg.set(len(pwd))
+        random_password_generator_page.label_val_slide.configure(text=len(pwd))
+        if pwd_score < 200:
             self.label_pwd_strong.place_forget()
             self.label_pwd_weak.place_forget()
             self.label_pwd_vulnerable.place(relx = 0.5, anchor = "n", y = 90)
-        elif 10 > pwd_score <= 20 or 15 >= len(pwd) < 20:
+        elif pwd_score >= 200 and len(pwd) < 15 :
             self.label_pwd_strong.place_forget()
             self.label_pwd_vulnerable.place_forget()
             self.label_pwd_weak.place(relx = 0.5, anchor = "n", y = 90)
-        elif pwd_score > 20 or len(pwd) >= 20:
+        elif len(pwd) >= 15:
             self.label_pwd_vulnerable.place_forget()
             self.label_pwd_weak.place_forget()
             self.label_pwd_strong.place(relx = 0.5, anchor = "n", y = 90)
@@ -348,7 +349,6 @@ class RandomPasswordGeneratorPage:
         return pwd
 
     def slider_event_rpg(self, value:int=20)-> None:
-        self.label_val_slide.configure(text=int(value))
         self.textbox.delete("0.0", "end")
         self.textbox.insert("0.0", self.gen(int(value)))
 
