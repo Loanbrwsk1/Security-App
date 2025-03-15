@@ -17,7 +17,7 @@ class LoginPage:
         self.entry_input = ctk.CTkEntry(window, width=600, height=100, corner_radius=30, font=("Trebuchet MS", 25), border_width=1, border_color=text_color, fg_color=primary_color_hover, text_color=text_color, show="✱")
         self.button_login = ctk.CTkButton(window, width=258, height=60, corner_radius=30,text=widgets_text[0][2], font=("Trebuchet MS", 25), border_width=1, command=self.login, border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
         self.button_new_pwd = ctk.CTkButton( window, width=50, height=60, corner_radius=30,text=widgets_text[0][3], font=("Trebuchet MS", 25), command=self.to_modify_pwd, border_width=1, border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color) 
-        self.switch_language = ctk.CTkSwitch(window, switch_height=30, switch_width=60, text=widgets_text[0][4], corner_radius=20, font=("Trebuchet MS", 20), command=switch_language, progress_color=text_color, button_hover_color=text_color_hover, fg_color=secondary_color, button_color=text_color, text_color=text_color)
+        self.switch_language = ctk.CTkSwitch(window, switch_height=30, switch_width=60, text=widgets_text[0][4], corner_radius=20, font=("Trebuchet MS", 20), command=self.switch_language, progress_color=text_color, button_hover_color=text_color_hover, fg_color=secondary_color, button_color=text_color, text_color=text_color)
         self.option_menu_palet = ctk.CTkOptionMenu(window, width=70, height=30, corner_radius=20, values=values_palet, font=("Trebuchet MS", 25), dropdown_font=("Trebuchet MS", 15), command=change_palet, fg_color=primary_color_hover, bg_color=primary_color, button_color=secondary_color, button_hover_color=secondary_color_hover, dropdown_fg_color=primary_color_hover, dropdown_hover_color=secondary_color, dropdown_text_color=text_color, text_color=text_color)
 
     def init(self)-> None:
@@ -49,8 +49,9 @@ class LoginPage:
         self.option_menu_palet.place(x=10, y=10)
 
     def login(self)-> None:
-        input = self.entry_input.get()
-        if hashlib.md5(input.encode()).hexdigest() == password:
+        global actual_password_not_hashed
+        actual_password_not_hashed = self.entry_input.get()
+        if hashlib.md5(actual_password_not_hashed.encode()).hexdigest() == datas.password:
             self.label_input.place_forget()
             self.entry_input.place_forget()
             self.button_new_pwd.place_forget()
@@ -61,6 +62,13 @@ class LoginPage:
         else:
             self.entry_input.delete(0, "end")
             self.label_error_login.place(x = 290, y = 210)
+
+    def switch_language(self):
+        if self.switch_language.get() == 0:
+            datas.language = "en"
+        else:
+            datas.language = "fr"
+        datas.load()
 
     def to_modify_pwd(self)-> None:
         modify_pwd_page.init()
@@ -108,22 +116,24 @@ class ModifyPwdPage:
         self.button_modify.place(x = 700, anchor = "ne", y = 440)
 
     def modify_pwd(self)-> None:
-        global password, actual_pwd
-        actual = self.entry_actual_pwd.get()
+        global actual_password_not_hashed, new_password_not_hashed
+        actual_password = self.entry_actual_pwd.get()
         new_pwd_1 = self.entry_new_pwd_1.get()
         new_pwd_2 = self.entry_new_pwd_2.get()
-        actual_pwd = hashlib.md5(actual.encode()).hexdigest()
-        if hashlib.md5(actual.encode()).hexdigest() == password:
+        if hashlib.md5(actual_password.encode()).hexdigest() == datas.password:
             if hashlib.md5(new_pwd_1.encode()).hexdigest() == hashlib.md5(new_pwd_2.encode()).hexdigest():
                 if new_pwd_1 != "":
-                    password = hashlib.md5(new_pwd_2.encode()).hexdigest()
+                    new_password = hashlib.md5(new_pwd_2.encode()).hexdigest()
                     self.label_error_actual_pwd_wrong.place_forget()
                     self.label_error_new_pwd_diff.place_forget()
                     self.label_error_empty_pwd.place_forget()
                     login_page.label_error_login.place_forget()
                     self.label_pwd_change_ok.place(relx = 0.5, anchor = "n", y = 395)
                     self.entry_actual_pwd.delete(0, "end")
-                    self.write_pwd(password)
+                    actual_password_not_hashed = actual_password
+                    new_password_not_hashed = new_pwd_2
+                    passwords_manager_page.password_changed()
+                    self.write_pwd(new_password)
                 else:
                     self.label_error_empty_pwd.place(relx = 0.5, anchor = "n", y = 395)
             else:
@@ -138,7 +148,6 @@ class ModifyPwdPage:
             self.label_error_empty_pwd.place_forget()
             login_page.label_error_login.place_forget()
             self.label_error_actual_pwd_wrong.place(relx = 0.5, anchor = "n", y = 395)
-        passwords_manager_page.password_changed()
 
     def write_pwd(self, pwd:str)-> None:
         datas.password = pwd
@@ -371,12 +380,12 @@ class PasswordsManagerPage:
         menu_page.button_menu.place(x = 10, y = 5)
         self.textbox_manage.place(x = 10, y = 40)
         self.textbox_manage.delete(0.0, "end")
-        self.textbox_manage.insert(0.0, self.decrypt(datas.manager, datas.password))
+        self.textbox_manage.insert(0.0, self.decrypt(datas.manager, actual_password_not_hashed))
         self.save()
 
     def save(self)-> None:
         content = self.textbox_manage.get(0.0, "end")
-        datas.manager = self.crypt(content[:-1], datas.password)
+        datas.manager = self.crypt(content[:-1], actual_password_not_hashed)
         datas.save()
         if locate == "passwords_manager_page":
             window.after(1000, self.save)
@@ -404,10 +413,12 @@ class PasswordsManagerPage:
         return result
 
     def password_changed(self):
-        actual_content = passwords_manager_page.decrypt(datas.manager, actual_pwd)
-        new_content = passwords_manager_page.crypt(actual_content, password)
+        global actual_password_not_hashed
+        actual_content = passwords_manager_page.decrypt(datas.manager, actual_password_not_hashed)
+        new_content = passwords_manager_page.crypt(actual_content, new_password_not_hashed)
+        actual_password_not_hashed = new_password_not_hashed
         datas.manager = new_content
-        passwords_manager_page.save()
+        datas.save()
 
     def to_menu_page(self)-> None:
         menu_page.init()
@@ -424,7 +435,10 @@ class Datas:
 
     def load(self)-> None:
         global widgets_text, values_palet
-        change_palet(self.palet)
+        if is_running : 
+            index = values_palet.index(login_page.option_menu_palet.get())
+        else:
+            change_palet(self.palet)
         if self.language == "en":
             values_palet = ["By default", "Dark", "Light", "Black and Red", "Grey and Red", "Blue and Brown", "Blue and Orange", "Black and Blue", "Green and Orange", "White and Blue", "Blue and Yellow", "Burgundy and Black"]
             widgets_text=[["Input your password", "Wrong password !", "Login", "Modify your password", "English"], 
@@ -439,6 +453,10 @@ class Datas:
             ["Verrouiller la session", "Application de Chiffrage / Déchiffrage", "Générateur de Mots de Passe Aléatoire", "Gestionnaire de Mot de Passe"],
             ["Entrée", "Sortie", "Entrez une clé ici", "Chiffrer", "Déchiffrer"],
             ["Entrez la longueur de votre mot de\npasse", "Mot de passe vulnérable !", "Mot de passe faible !", "Mot de passe fort !", "Générer un\nmot de passe", "Tester l'efficacité de\nvotre mot de passe"]]
+        if is_running:
+            self.palet = values_palet[index]
+            update_switch_color()
+            apply_changes_language()
 
     def save(self)-> None:
         datas_to_save = {"Palet":self.palet, "Language":self.language, "Password":self.password, "Passwords Manager":self.manager}
@@ -588,32 +606,6 @@ def update_switch_color()-> None:
         login_page.switch_language.configure(button_color=text_color, button_hover_color=text_color_hover)
     else:
         login_page.switch_language.configure(button_color=secondary_color, button_hover_color=secondary_color_hover)
-
-def switch_language()-> None:
-    global values_palet, index, widgets_text
-    if login_page.switch_language.get() == 0:
-        datas.language = "en"
-        index = values_palet.index(login_page.option_menu_palet.get())
-        values_palet = ["By default", "Dark", "Light", "Black and Red", "Grey and Red", "Blue and Brown", "Blue and Orange", "Black and Blue", "Green and Orange", "White and Blue", "Blue and Yellow", "Burgundy and Black"]
-        widgets_text=[["Input your password", "Wrong password !", "Login", "Modify your password", "English"], 
-                        ["Actual password", "Enter your new password", "Confirm your password", "Password changed successfully !", "The actual password is wrong !", "The passwords are not the same !", "The new password must not be empty !", "Back", "Modify your password"], 
-                        ["Lock the session", "Crypt / Decrytp Software", "Random Password Generator", "Passwords Manager"],
-                        ["Input", "Output", "Put a key here", "Crypt", "Decrypt"],
-                        ["Input the lenght of your password", "Password vulnerable !", "Password weak !", "Password strong !", "Generate a\npassword", "Test the efficiency\nof your password"]]
-        datas.palet = values_palet[index]
-    elif login_page.switch_language.get() == 1:
-        datas.language = "fr"
-        index = values_palet.index(login_page.option_menu_palet.get())
-        values_palet = ["Par default", "Sombre", "Clair", "Noir et Rouge", "Gris et Rouge", "Bleu et Marron", "Bleu et Orange", "Noir et Bleu", "Vert et Orange", "Blanc et Bleu", "Bleu et Jaune", "Bordeaux et Noir"]
-        widgets_text=[["Entrez votre mot de passe", "Mauvais mot de passe", "Se connecter", "Modifier votre mot de\npasse", "Français"], 
-                        ["Mot de passe actuel", "Entrez votre nouveau mot de passe", "Confirmez votre mot de passe", "Mot de passe modifié avec succès !", "Le mot de passe actuel est incorrect !", "Les mots de passe ne sont pas les mêmes !", "Le nouveau mot de passe ne doit pas être vide !", "Retour", "Modifier votre mot de passe"],
-                        ["Verrouiller la session", "Application de Chiffrage / Déchiffrage", "Générateur de Mots de Passe Aléatoire", "Gestionnaire de Mot de Passe"],
-                        ["Entrée", "Sortie", "Entrez une clé ici", "Chiffrer", "Déchiffrer"],
-                        ["Entrez la longueur de votre mot de\npasse", "Mot de passe vulnérable !", "Mot de passe faible !", "Mot de passe fort !", "Générer un\nmot de passe", "Tester l'efficacité de\nvotre mot de passe"]]
-        datas.palet = values_palet[index]
-    if is_running:
-        apply_changes_language()
-        update_switch_color()
 
 def apply_changes_language()-> None:
     login_page.option_menu_palet.configure(values=values_palet)
