@@ -1,5 +1,5 @@
 """
-@author : Loan Borowski
+@author : Loan_brwsk
 """
 
 #? Imports
@@ -17,7 +17,7 @@ class LoginPage:
         self.entry_input = ctk.CTkEntry(window, width=600, height=100, corner_radius=30, font=("Trebuchet MS", 25), border_width=1, border_color=text_color, fg_color=primary_color_hover, text_color=text_color, show="✱")
         self.button_login = ctk.CTkButton(window, width=258, height=60, corner_radius=30,text=widgets_text[0][2], font=("Trebuchet MS", 25), border_width=1, command=self.login, border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
         self.button_new_pwd = ctk.CTkButton( window, width=50, height=60, corner_radius=30,text=widgets_text[0][3], font=("Trebuchet MS", 25), command=self.to_modify_pwd, border_width=1, border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color) 
-        self.switch_language = ctk.CTkSwitch(window, switch_height=30, switch_width=60, text=widgets_text[0][4], corner_radius=20, font=("Trebuchet MS", 20), command=self.switch_language, progress_color=text_color, button_hover_color=text_color_hover, fg_color=secondary_color, button_color=text_color, text_color=text_color)
+        self.switch_language_widget = ctk.CTkSwitch(window, switch_height=30, switch_width=60, text=widgets_text[0][4], corner_radius=20, font=("Trebuchet MS", 20), command=self.switch_language, progress_color=text_color, button_hover_color=text_color_hover, fg_color=secondary_color, button_color=text_color, text_color=text_color)
         self.option_menu_palet = ctk.CTkOptionMenu(window, width=70, height=30, corner_radius=20, values=values_palet, font=("Trebuchet MS", 25), dropdown_font=("Trebuchet MS", 15), command=change_palet, fg_color=primary_color_hover, bg_color=primary_color, button_color=secondary_color, button_hover_color=secondary_color_hover, dropdown_fg_color=primary_color_hover, dropdown_hover_color=secondary_color, dropdown_text_color=text_color, text_color=text_color)
 
     def init(self)-> None:
@@ -45,7 +45,7 @@ class LoginPage:
         self.entry_input.place(relx = 0.5, anchor = "n", y = 100)
         self.button_new_pwd.place(x = 100, y = 260)
         self.button_login.place(x = 440, y = 260)
-        self.switch_language.place(x = 650, y = 10)
+        self.switch_language_widget.place(x = 650, y = 10)
         self.option_menu_palet.place(x=10, y=10)
 
     def login(self)-> None:
@@ -64,7 +64,7 @@ class LoginPage:
             self.label_error_login.place(x = 290, y = 210)
 
     def switch_language(self):
-        if self.switch_language.get() == 0:
+        if self.switch_language_widget.get() == 0:
             datas.language = "en"
         else:
             datas.language = "fr"
@@ -176,7 +176,7 @@ class MenuPage:
         self.button_manage.place(relx = 0.5, anchor = "n", y = 220)
         self.button_login_page.place(relx = 0.5, anchor = "n", y = 320)
         self.button_menu.place_forget()
-        login_page.switch_language.place(x = 650, y = 10)
+        login_page.switch_language_widget.place(x = 650, y = 10)
         login_page.option_menu_palet.place(x=10, y=10)
         crypt_decrypt_page.label_input_crypt_decrypt.place_forget()
         crypt_decrypt_page.label_output.place_forget()
@@ -230,13 +230,13 @@ class CryptDecryptPage:
         global locate
         window.geometry("950x460")
         window.title("Crypt / Decrypt")
-        window.iconbitmap("./Icons/icon-Crypt-Decrypt.ico")
+        window.iconbitmap("./icons/icon-Crypt-Decrypt.ico")
         locate = "crypt_decrypt_page"
         menu_page.button_login_page.place_forget()
         menu_page.button_crypt_decrypt.place_forget()
         menu_page.button_pwd_gen.place_forget()
         menu_page.button_manage.place_forget()
-        login_page.switch_language.place_forget()
+        login_page.switch_language_widget.place_forget()
         login_page.option_menu_palet.place_forget()
         self.label_input_crypt_decrypt.place(x = 102, y = 10)
         self.textbox_input_crypt_decrypt.place(x = 10, y = 50)
@@ -375,7 +375,7 @@ class PasswordsManagerPage:
         menu_page.button_pwd_gen.place_forget()
         menu_page.button_manage.place_forget()
         menu_page.button_login_page.place_forget()
-        login_page.switch_language.place_forget()
+        login_page.switch_language_widget.place_forget()
         login_page.option_menu_palet.place_forget()
         menu_page.button_menu.place(x = 10, y = 5)
         self.textbox_manage.place(x = 10, y = 40)
@@ -567,7 +567,7 @@ def apply_changes()-> None:
     login_page.entry_input.configure(border_color=text_color, fg_color=primary_color_hover, text_color=text_color)
     login_page.button_login.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
     login_page.button_new_pwd.configure(border_color=text_color, hover_color=secondary_color_hover, fg_color=secondary_color, text_color=text_color)
-    login_page.switch_language.configure(progress_color=text_color, button_hover_color=text_color_hover, fg_color=secondary_color, button_color=text_color, text_color=text_color)
+    login_page.switch_language_widget.configure(progress_color=text_color, button_hover_color=text_color_hover, fg_color=secondary_color, button_color=text_color, text_color=text_color)
     login_page.option_menu_palet.configure(fg_color=primary_color_hover, bg_color=primary_color, button_color=secondary_color, button_hover_color=secondary_color_hover, dropdown_fg_color=primary_color_hover, dropdown_hover_color=secondary_color, dropdown_text_color=text_color, text_color=text_color)
     update_switch_color()
     modify_pwd_page.label_actual_pwd.configure(text_color=text_color)
@@ -602,19 +602,19 @@ def apply_changes()-> None:
     datas.save()
 
 def update_switch_color()-> None:
-    if login_page.switch_language.get() == 0:
-        login_page.switch_language.configure(button_color=text_color, button_hover_color=text_color_hover)
+    if login_page.switch_language_widget.get() == 0:
+        login_page.switch_language_widget.configure(button_color=text_color, button_hover_color=text_color_hover)
     else:
-        login_page.switch_language.configure(button_color=secondary_color, button_hover_color=secondary_color_hover)
+        login_page.switch_language_widget.configure(button_color=secondary_color, button_hover_color=secondary_color_hover)
 
 def apply_changes_language()-> None:
     login_page.option_menu_palet.configure(values=values_palet)
-    login_page.option_menu_palet.set(values_palet[index])
+    login_page.option_menu_palet.set(datas.palet)
     login_page.label_input.configure(text=widgets_text[0][0])
     login_page.label_error_login.configure(text=widgets_text[0][1])
     login_page.button_login.configure(text=widgets_text[0][2])
     login_page.button_new_pwd.configure(text=widgets_text[0][3])
-    login_page.switch_language.configure(text=widgets_text[0][4])
+    login_page.switch_language_widget.configure(text=widgets_text[0][4])
     modify_pwd_page.label_actual_pwd.configure(text=widgets_text[1][0])
     modify_pwd_page.label_new_pwd_1.configure(text=widgets_text[1][1])
     modify_pwd_page.label_new_pwd_2.configure(text=widgets_text[1][2])
@@ -691,7 +691,7 @@ if __name__ == "__main__":
     passwords_manager_page = PasswordsManagerPage()
 
     if datas.language == "fr":
-        login_page.switch_language.select()
+        login_page.switch_language_widget.select()
         update_switch_color()
     index = values_palet.index(datas.palet)
     login_page.option_menu_palet.set(values_palet[index])
