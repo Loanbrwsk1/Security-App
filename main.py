@@ -24,7 +24,7 @@ class LoginPage:
         global locate
         window.geometry("800x400")
         window.title("Login")
-        window.iconbitmap("./icons/icon Login.ico")
+        window.iconbitmap("./icons/icon-Login.ico")
         locate = "login_page"
         modify_pwd_page.label_error_empty_pwd.place_forget()
         modify_pwd_page.label_actual_pwd.place_forget()
@@ -72,7 +72,7 @@ class LoginPage:
 
     def to_modify_pwd(self)-> None:
         modify_pwd_page.init()
-
+    
     def to_menu(self)-> None:
         menu_page.init()
 
@@ -169,7 +169,7 @@ class MenuPage:
         global locate
         window.geometry("800x400")
         window.title("Menu")
-        window.iconbitmap("./icons/icon Menu.ico")
+        window.iconbitmap("./icons/icon-Menu.ico")
         locate = "menu_page"
         self.button_crypt_decrypt.place(relx = 0.5, anchor = "n", y = 60)
         self.button_pwd_gen.place(relx = 0.5, anchor = "n", y = 140)
@@ -230,7 +230,7 @@ class CryptDecryptPage:
         global locate
         window.geometry("950x460")
         window.title("Crypt / Decrypt")
-        window.iconbitmap("./Icons/icon Crypt Decrypt.ico")
+        window.iconbitmap("./Icons/icon-Crypt-Decrypt.ico")
         locate = "crypt_decrypt_page"
         menu_page.button_login_page.place_forget()
         menu_page.button_crypt_decrypt.place_forget()
@@ -293,10 +293,10 @@ class RandomPasswordGeneratorPage:
         self.button_try_pwd = ctk.CTkButton(window, height=40, corner_radius=30, text=widgets_text[4][5], command=self.action_test_button, font=("Trebuchet MS", 13), hover_color=secondary_color_hover, border_width=1, border_color=text_color, fg_color=secondary_color, text_color=text_color)
         self.textbox = ctk.CTkTextbox(window, width=300, height=93, corner_radius=20, font=("Trebuchet MS", 20), border_width=1, border_color=text_color, fg_color=primary_color_hover, text_color=text_color)
         self.slider_rpg = ctk.CTkSlider(window, width=300, from_=1, to=40, command=self.slider_event_rpg, button_hover_color=secondary_color_hover, fg_color=secondary_color, button_color=secondary_color)
-        
+    
     def init(self)-> None:
         global locate
-        window.iconbitmap("./icons/icon-pwd-gen.ico")
+        window.iconbitmap("./icons/icon-Password-Generator.ico")
         window.geometry("330x350")
         locate = "pwd_gen_page"
         menu_page.button_crypt_decrypt.place_forget()
@@ -369,7 +369,7 @@ class PasswordsManagerPage:
     def init(self)-> None:
         global locate
         window.title("Passwords Manager")
-        window.iconbitmap("./icons/icon-manage.ico")
+        window.iconbitmap("./icons/icon-Manager.ico")
         locate = "passwords_manager_page"
         menu_page.button_crypt_decrypt.place_forget()
         menu_page.button_pwd_gen.place_forget()
@@ -658,15 +658,15 @@ if __name__ == "__main__":
     #? Window
     window = ctk.CTk()
     window.title("Login")
-    window.iconbitmap("./icons/icon Login.ico")
+    window.iconbitmap("./icons/icon-Login.ico")
     window.geometry("800x400+240+80")
     window.configure(background="black", fg_color=primary_color)
     window.resizable(width=False, height=False)
 
     #? Vars
-    img_pwd_gen = ctk.CTkImage(light_image=Image.open("./icons/icon pwd-gen.png"), size=(30, 30))
-    img_crypt = ctk.CTkImage(light_image=Image.open("./icons/icon Crypt Decrypt.ico"), size=(30, 30))
-    img_manage = ctk.CTkImage(light_image=Image.open("./icons/icon manage.png"), size=(30, 30))
+    img_pwd_gen = ctk.CTkImage(light_image=Image.open("./icons/icon-Password-Generator.ico"), size=(30, 30))
+    img_crypt = ctk.CTkImage(light_image=Image.open("./icons/icon-Crypt-Decrypt.ico"), size=(30, 30))
+    img_manage = ctk.CTkImage(light_image=Image.open("./icons/icon-Manager.ico"), size=(30, 30))
 
     locate = "login_page"
 
