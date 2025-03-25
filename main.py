@@ -23,7 +23,7 @@ class LoginPage:
     def init(self)-> None:
         global locate
         window.geometry("800x400")
-        window.title("Login")
+        window.title(widgets_text[5][0])
         window.iconbitmap("./icons/icon-Login.ico")
         locate = "login_page"
         modify_pwd_page.label_error_empty_pwd.place_forget()
@@ -229,7 +229,7 @@ class CryptDecryptPage:
     def init(self)-> None:
         global locate
         window.geometry("950x460")
-        window.title("Crypt / Decrypt")
+        window.title(widgets_text[5][1])
         window.iconbitmap("./icons/icon-Crypt-Decrypt.ico")
         locate = "crypt_decrypt_page"
         menu_page.button_login_page.place_forget()
@@ -296,6 +296,7 @@ class RandomPasswordGeneratorPage:
     
     def init(self)-> None:
         global locate
+        window.title(widgets_text[5][2])
         window.iconbitmap("./icons/icon-Password-Generator.ico")
         window.geometry("330x350")
         locate = "pwd_gen_page"
@@ -368,7 +369,7 @@ class PasswordsManagerPage:
 
     def init(self)-> None:
         global locate
-        window.title("Passwords Manager")
+        window.title(widgets_text[5][3])
         window.iconbitmap("./icons/icon-Manager.ico")
         locate = "passwords_manager_page"
         menu_page.button_crypt_decrypt.place_forget()
@@ -445,14 +446,16 @@ class Datas:
             ["Actual password", "Enter your new password", "Confirm your password", "Password changed successfully !", "The actual password is wrong !", "The passwords are not the same !", "The new password must not be empty !", "Back", "Modify your password"], 
             ["Lock the session", "Crypt / Decrytp Software", "Random Password Generator", "Passwords Manager"],
             ["Input", "Output", "Put a key here", "Crypt", "Decrypt"],
-            ["Input the lenght of your password", "Password vulnerable !", "Password weak !", "Password strong !", "Generate a\npassword", "Test the efficiency\nof your password"]]
+            ["Input the lenght of your password", "Password vulnerable !", "Password weak !", "Password strong !", "Generate a\npassword", "Test the efficiency\nof your password"],
+            ["Login", "Crypt / Decrypt", "Random Password Generator", "Passwords Manager"]]
         else:
             values_palet = ["Par default", "Sombre", "Clair", "Noir et Rouge", "Gris et Rouge", "Bleu et Marron", "Bleu et Orange", "Noir et Bleu", "Vert et Orange", "Blanc et Bleu", "Bleu et Jaune", "Bordeaux et Noir"]
             widgets_text=[["Entrez votre mot de passe", "Mauvais mot de passe", "Se connecter", "Modifier votre mot de\npasse", "Français"], 
             ["Mot de passe actuel", "Entrez votre nouveau mot de passe", "Confirmez votre mot de passe", "Mot de passe modifié avec succès !", "Le mot de passe actuel est incorrect !", "Les mots de passe ne sont pas les mêmes !", "Le nouveau mot de passe ne doit pas être vide !", "Retour", "Modifier votre mot de passe"],
-            ["Verrouiller la session", "Application de Chiffrage / Déchiffrage", "Générateur de Mots de Passe Aléatoire", "Gestionnaire de Mot de Passe"],
+            ["Verrouiller la session", "Application de Chiffrage / Déchiffrage", "Générateur de Mots de Passe Aléatoire", "Gestionnaire de Mots de Passe"],
             ["Entrée", "Sortie", "Entrez une clé ici", "Chiffrer", "Déchiffrer"],
-            ["Entrez la longueur de votre mot de\npasse", "Mot de passe vulnérable !", "Mot de passe faible !", "Mot de passe fort !", "Générer un\nmot de passe", "Tester l'efficacité de\nvotre mot de passe"]]
+            ["Entrez la longueur de votre mot de\npasse", "Mot de passe vulnérable !", "Mot de passe faible !", "Mot de passe fort !", "Générer un\nmot de passe", "Tester l'efficacité de\nvotre mot de passe"],
+            ["Connection", "Chiffrage / Déchiffrage", "Générateur de Mots de Passe Aléatoire", "Gestionnaire de Mots de Passe"]]
         if is_running:
             self.palet = values_palet[index]
             update_switch_color()
@@ -608,6 +611,8 @@ def update_switch_color()-> None:
         login_page.switch_language_widget.configure(button_color=secondary_color, button_hover_color=secondary_color_hover)
 
 def apply_changes_language()-> None:
+    if locate == "login_page":
+        window.title(widgets_text[5][0])
     login_page.option_menu_palet.configure(values=values_palet)
     login_page.option_menu_palet.set(datas.palet)
     login_page.label_input.configure(text=widgets_text[0][0])
