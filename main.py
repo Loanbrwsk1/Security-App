@@ -455,7 +455,7 @@ class Datas:
             ["Verrouiller la session", "Application de Chiffrage / Déchiffrage", "Générateur de Mots de Passe Aléatoire", "Gestionnaire de Mots de Passe"],
             ["Entrée", "Sortie", "Entrez une clé ici", "Chiffrer", "Déchiffrer"],
             ["Entrez la longueur de votre mot de\npasse", "Mot de passe vulnérable !", "Mot de passe faible !", "Mot de passe fort !", "Générer un\nmot de passe", "Tester l'efficacité de\nvotre mot de passe"],
-            ["Connection", "Chiffrage / Déchiffrage", "Générateur de Mots de Passe Aléatoire", "Gestionnaire de Mots de Passe"]]
+            ["Connexion", "Chiffrage / Déchiffrage", "Générateur de Mots de Passe Aléatoire", "Gestionnaire de Mots de Passe"]]
         if is_running:
             self.palet = values_palet[index]
             update_switch_color()
