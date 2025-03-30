@@ -464,7 +464,7 @@ class Datas:
     def save(self)-> None:
         datas_to_save = {"Palet":self.palet, "Language":self.language, "Password":self.password, "Passwords Manager":self.manager}
         with open("user_data.json", "w") as file:
-            json.dump(datas_to_save, file)
+            json.dump(datas_to_save, file, indent=4)
 
 
 #? Functions
