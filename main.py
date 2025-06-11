@@ -8,6 +8,7 @@ import customtkinter as ctk
 import random
 import hashlib
 import json
+import os
 
 #? Class
 class LoginPage:
@@ -24,7 +25,8 @@ class LoginPage:
         global locate
         window.geometry("800x400")
         window.title(widgets_text[5][0])
-        window.iconbitmap("./icons/icon-Login.ico")
+        if os.name == "nt":
+            window.iconbitmap("./icons/icon-Login.ico")
         locate = "login_page"
         modify_pwd_page.label_error_empty_pwd.place_forget()
         modify_pwd_page.label_actual_pwd.place_forget()
@@ -169,7 +171,8 @@ class MenuPage:
         global locate
         window.geometry("800x400")
         window.title("Menu")
-        window.iconbitmap("./icons/icon-Menu.ico")
+        if os.name == "nt":
+            window.iconbitmap("./icons/icon-Menu.ico")
         locate = "menu_page"
         self.button_crypt_decrypt.place(relx = 0.5, anchor = "n", y = 60)
         self.button_pwd_gen.place(relx = 0.5, anchor = "n", y = 140)
@@ -230,7 +233,8 @@ class CryptDecryptPage:
         global locate
         window.geometry("950x460")
         window.title(widgets_text[5][1])
-        window.iconbitmap("./icons/icon-Crypt-Decrypt.ico")
+        if os.name == "nt":
+            window.iconbitmap("./icons/icon-Crypt-Decrypt.ico")
         locate = "crypt_decrypt_page"
         menu_page.button_login_page.place_forget()
         menu_page.button_crypt_decrypt.place_forget()
@@ -297,7 +301,8 @@ class RandomPasswordGeneratorPage:
     def init(self)-> None:
         global locate
         window.title(widgets_text[5][2])
-        window.iconbitmap("./icons/icon-Password-Generator.ico")
+        if os.name == "nt":
+            window.iconbitmap("./icons/icon-Password-Generator.ico")
         window.geometry("330x350")
         locate = "pwd_gen_page"
         menu_page.button_crypt_decrypt.place_forget()
@@ -370,7 +375,8 @@ class PasswordsManagerPage:
     def init(self)-> None:
         global locate
         window.title(widgets_text[5][3])
-        window.iconbitmap("./icons/icon-Manager.ico")
+        if os.name == "nt":
+            window.iconbitmap("./icons/icon-Manager.ico")
         locate = "passwords_manager_page"
         menu_page.button_crypt_decrypt.place_forget()
         menu_page.button_pwd_gen.place_forget()
@@ -663,7 +669,8 @@ if __name__ == "__main__":
     #? Window
     window = ctk.CTk()
     window.title("Login")
-    window.iconbitmap("./icons/icon-Login.ico")
+    if os.name == "nt":
+        window.iconbitmap("./icons/icon-Login.ico")
     window.geometry("800x400+240+80")
     window.configure(background="black", fg_color=primary_color)
     window.resizable(width=False, height=False)
