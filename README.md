@@ -13,14 +13,19 @@ Dans cette appli, vous pouvez chiffrer et déchiffrer un message avec une clé e
 Aussi, vous pouvez générer des mots de passe sécurisés et tester les votres.
 Enfin, vous poivez sauvegarder ce que vous voulez dans le gestionnaire de mot de passe qui est aussi chiffré avec votre mot de passe en clair.
 
+### **Bibliothèques utilisées**
+
+- pillow
+- pycryptodome
+- tkinter
+- customtkinter
+- hashlib
+- bcrypt
+
 ### **Customisation**
 
-Vous pouvez custmoiser l'application en changeant la palette dans le coin haut gauche et le language (Français ou Anglais) dans le coin haut droit.
+Vous pouvez customiser l'application en changeant la palette dans le coin haut gauche et le language (Français ou Anglais) dans le coin haut droit.
 Tous ces paramètres et données sont sauvegardées dans le fichier user_data.json.
-
-### **Utilisation du fichier .exe**
-
-Pour éxecuter le fichier .exe, vous devez en faire un raccouri sur votre bureau, sinon vous devez aller chercher le fichier pour l'éxecuter. Vous ne pouvez pas copier/coller les fichiers sur le bureau, cela ne va pas marcher.
 
 ### **Problème d'affichage**
 
@@ -35,14 +40,19 @@ In this app, you can crypt and decrypt a message with a key using a symmetric en
 Also, you can generate secured passwords and test yours.  
 Finally, you can save whatever your want in the Passwords Manager which is also crypted with your password.
 
+### **Libraries used**
+
+- pillow
+- pycryptodome
+- tkinter
+- customtkinter
+- hashlib
+- bcrypt
+
 ### **Customization**
 
 You can customize the app by changing the palet in the top left and the language (English or French) in the top right.
 All this settings and datas will be saved in the user_data.json file.
-
-### **Use of the .exe file**
-
-To execute the .exe file, you need to make a shortcut of it on your desktop, else you have to find the file to execute it. You can't copy/paste the file on your desktop, it will not work.
 
 ### **Display issue**
 

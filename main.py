@@ -4,9 +4,13 @@
 
 #? Imports
 from PIL import Image
+from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
 import customtkinter as ctk
 import random
 import hashlib
+import bcrypt
+import base64
 import json
 import os
 
@@ -53,7 +57,7 @@ class LoginPage:
     def login(self)-> None:
         global actual_password_not_hashed
         actual_password_not_hashed = self.entry_input.get()
-        if hashlib.md5(actual_password_not_hashed.encode()).hexdigest() == datas.password:
+        if bcrypt.checkpw(actual_password_not_hashed.encode("utf-8"), datas.password.encode("utf-8")):
             self.label_input.place_forget()
             self.entry_input.place_forget()
             self.button_new_pwd.place_forget()
@@ -122,10 +126,12 @@ class ModifyPwdPage:
         actual_password = self.entry_actual_pwd.get()
         new_pwd_1 = self.entry_new_pwd_1.get()
         new_pwd_2 = self.entry_new_pwd_2.get()
-        if hashlib.md5(actual_password.encode()).hexdigest() == datas.password:
-            if hashlib.md5(new_pwd_1.encode()).hexdigest() == hashlib.md5(new_pwd_2.encode()).hexdigest():
+        if bcrypt.checkpw(actual_password.encode("utf-8"), datas.password.encode("utf-8")):
+            if new_pwd_1 == new_pwd_2:
                 if new_pwd_1 != "":
-                    new_password = hashlib.md5(new_pwd_2.encode()).hexdigest()
+                    salt = bcrypt.gensalt()
+                    new_password = bcrypt.hashpw(new_pwd_2.encode("utf-8"), salt)
+                    new_password = new_password.decode("utf-8")
                     self.label_error_actual_pwd_wrong.place_forget()
                     self.label_error_new_pwd_diff.place_forget()
                     self.label_error_empty_pwd.place_forget()
@@ -397,27 +403,20 @@ class PasswordsManagerPage:
         if locate == "passwords_manager_page":
             window.after(1000, self.save)
 
-    def crypt(self, message:str, key:str)-> str:
-        result = ""
-        random.seed(key)
-        alphabet_shuffle = alph.copy()
-        random.shuffle(alphabet_shuffle)
-        for i in message:
-            for j in range(len(alph)):
-                if i == alph[j]:
-                    result += alphabet_shuffle[j]
-        return result
+    def crypt(self, plain_text:str, secret:str)-> str:
+        key = hashlib.sha256(secret.encode()).digest()
+        iv  = get_random_bytes(AES.block_size)
+        cipher = AES.new(key, AES.MODE_EAX, nonce=iv)
+        ciphertext, tag = cipher.encrypt_and_digest(plain_text.encode())
+        return base64.b64encode(iv + tag + ciphertext).decode()
 
-    def decrypt(self, message:str,  key:str)-> str:
-        result = ""
-        random.seed(key)
-        alphabet_shuffle = alph.copy()
-        random.shuffle(alphabet_shuffle)
-        for i in message:
-            for j in range(len(alph)):
-                if i == alphabet_shuffle[j]:
-                    result += alph[j]
-        return result
+    def decrypt(self, encoded:str, secret:str)-> str:
+        data = base64.b64decode(encoded)
+        iv, tag, ciphertext = data[:16], data[16:32], data[32:]
+        key = hashlib.sha256(secret.encode()).digest()
+        cipher = AES.new(key, AES.MODE_EAX, nonce=iv)
+        plain = cipher.decrypt_and_verify(ciphertext, tag)
+        return plain.decode()
 
     def password_changed(self):
         global actual_password_not_hashed
