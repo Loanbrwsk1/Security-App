@@ -8,10 +8,11 @@
 
 ### **Description**
 
-Cette application est sécurisée par un mot de passe (prar défaut "password") et vous pouvez le modifier.
-Dans cette appli, vous pouvez chiffrer et déchiffrer un message avec une clé en utilisant un chiffrement symétrique.
-Aussi, vous pouvez générer des mots de passe sécurisés et tester les votres.
-Enfin, vous poivez sauvegarder ce que vous voulez dans le gestionnaire de mot de passe qui est aussi chiffré avec votre mot de passe en clair.
+Cette application est sécurisée par un mot de passe (par défaut "_password_") et vous pouvez le modifier.
+De plus, votre mot de passe est chiffré avec bcrypt.
+Dans cette appli, vous pouvez chiffrer et déchiffrer un message avec une clé en utilisant un chiffrement symétrique AES.
+Aussi, vous pouvez générer des mots de passe sécurisés et tester les vôtres.
+Enfin, vous pouvez sauvegarder ce que vous voulez dans le gestionnaire de mots de passe qui est aussi chiffré avec comme clé votre mot de passe en clair.
 
 ### **Bibliothèques utilisées**
 
@@ -19,8 +20,25 @@ Enfin, vous poivez sauvegarder ce que vous voulez dans le gestionnaire de mot de
 - pycryptodome
 - tkinter
 - customtkinter
+- random
 - hashlib
 - bcrypt
+- base64
+- string
+- json
+- os
+
+### **Lancer le script**
+
+Sur Windows, après avoir installé les bibliothèques demandées, une simple exécution via VSCode devrait fonctionner. Sinon passez par le terminal et exécutez avec ```python main.py``` une fois dans le dossier.
+
+Sur Linux, vous aurez peut-être besoin de créer un environnement :
+
+- ```python3 -m venv venv``` dans le dossier
+- ```source venv/bin/activate```
+- ```python3 main.py```
+
+Et tout devrait fonctionner normalement.
 
 ### **Customisation**
 
@@ -36,9 +54,10 @@ Si la fenêtre semble ne pas être normale, vérifiez que votre écran n'est pas
 ### **Decription**
 
 This app is secured by a password (by default "password") and you can modify it.  
-In this app, you can crypt and decrypt a message with a key using a symmetric encryption.  
+Also, your password is encrypted with bcrypt.
+In this app, you can crypt and decrypt a message with a key using a symmetric encryption.
 Also, you can generate secured passwords and test yours.  
-Finally, you can save whatever your want in the Passwords Manager which is also crypted with your password.
+Finally, you can save whatever you want in the passwords manager which is also encrypted with your plaintext password as a key.
 
 ### **Libraries used**
 
@@ -46,8 +65,25 @@ Finally, you can save whatever your want in the Passwords Manager which is also 
 - pycryptodome
 - tkinter
 - customtkinter
+- random
 - hashlib
 - bcrypt
+- base64
+- string
+- json
+- os
+
+### **Launch the script**
+
+On Windows, after installing the requested libraries, a simple execution via VSCode should work. Otherwise, go through the terminal and run it with ``python main.py`` once in the folder.
+
+On Linux, you may need to create an environment:
+
+- ```python3 -m venv venv`` in the folder
+- ``source venv/bin/activate``
+- ```python3 main.py```
+
+And everything should work normally.
 
 ### **Customization**
 

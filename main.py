@@ -11,6 +11,7 @@ import random
 import hashlib
 import bcrypt
 import base64
+import string
 import json
 import os
 
@@ -259,34 +260,19 @@ class CryptDecryptPage:
         self.button_menu.place(x = 10, y = 10)
         
     def crypt(self)-> None:
-        result = ""
-        key = self.entry_key_crypt.get()
-        message = self.textbox_input_crypt_decrypt.get("0.0", "end")
-        message = message[:-1]
-        random.seed(key)
-        alphabet_shuffle = alph.copy()
-        random.shuffle(alphabet_shuffle)
-        for i in message:
-            for j in range(len(alph)):
-                if i == alph[j]:
-                    result += alphabet_shuffle[j]
-            self.textbox_output_crypt_decrypt.delete("0.0", "end")
-            self.textbox_output_crypt_decrypt.insert("0.0", result)
+        self.textbox_output_crypt_decrypt.delete("0.0", "end")
+        try:
+            self.textbox_output_crypt_decrypt.insert("0.0", crypt(self.textbox_input_crypt_decrypt.get("0.0", "end")[:-1], self.entry_key_crypt.get()))
+        except:
+            self.textbox_output_crypt_decrypt.insert("0.0", "Chaine d'entrée\ncorrompue !")
+        
 
     def decrypt(self)-> None:
-        result = ""
-        key = self.entry_key_crypt.get()
-        message = self.textbox_input_crypt_decrypt.get("0.0", "end")
-        message = message[:-1]
-        random.seed(key)
-        alphabet_shuffle = alph.copy()
-        random.shuffle(alphabet_shuffle)
-        for i in message:
-            for j in range(len(alph)):
-                if i == alphabet_shuffle[j]:
-                    result += alph[j]
-            self.textbox_output_crypt_decrypt.delete("0.0", "end")
-            self.textbox_output_crypt_decrypt.insert("0.0", result)
+        self.textbox_output_crypt_decrypt.delete("0.0", "end")
+        try:
+            self.textbox_output_crypt_decrypt.insert("0.0", decrypt(self.textbox_input_crypt_decrypt.get("0.0", "end")[:-1], self.entry_key_crypt.get()))
+        except:
+            self.textbox_output_crypt_decrypt.insert("0.0", "Chaine d'entrée\ncorrompue !")
 
     def to_menu_page(self)-> None:
         menu_page.init()
@@ -362,10 +348,8 @@ class RandomPasswordGeneratorPage:
             self.label_pwd_weak.place_forget()
             self.label_pwd_strong.place(relx = 0.5, anchor = "n", y = 90)
 
-    def gen(self, lenght:int)-> str:
-        pwd = ""
-        for _ in range(lenght):
-            pwd += all[random.randint(0, len(all) - 1)]
+    def gen(self, length:int)-> str:
+        pwd = "".join(random.sample(all, length))
         self.try_pwd(pwd)
         return pwd
 
@@ -393,35 +377,20 @@ class PasswordsManagerPage:
         menu_page.button_menu.place(x = 10, y = 5)
         self.textbox_manage.place(x = 10, y = 40)
         self.textbox_manage.delete(0.0, "end")
-        self.textbox_manage.insert(0.0, self.decrypt(datas.manager, actual_password_not_hashed))
+        self.textbox_manage.insert(0.0, decrypt(datas.manager, actual_password_not_hashed))
         self.save()
 
     def save(self)-> None:
         content = self.textbox_manage.get(0.0, "end")
-        datas.manager = self.crypt(content[:-1], actual_password_not_hashed)
+        datas.manager = crypt(content[:-1], actual_password_not_hashed)
         datas.save()
         if locate == "passwords_manager_page":
             window.after(1000, self.save)
 
-    def crypt(self, plain_text:str, secret:str)-> str:
-        key = hashlib.sha256(secret.encode()).digest()
-        iv  = get_random_bytes(AES.block_size)
-        cipher = AES.new(key, AES.MODE_EAX, nonce=iv)
-        ciphertext, tag = cipher.encrypt_and_digest(plain_text.encode())
-        return base64.b64encode(iv + tag + ciphertext).decode()
-
-    def decrypt(self, encoded:str, secret:str)-> str:
-        data = base64.b64decode(encoded)
-        iv, tag, ciphertext = data[:16], data[16:32], data[32:]
-        key = hashlib.sha256(secret.encode()).digest()
-        cipher = AES.new(key, AES.MODE_EAX, nonce=iv)
-        plain = cipher.decrypt_and_verify(ciphertext, tag)
-        return plain.decode()
-
     def password_changed(self):
         global actual_password_not_hashed
-        actual_content = passwords_manager_page.decrypt(datas.manager, actual_password_not_hashed)
-        new_content = passwords_manager_page.crypt(actual_content, new_password_not_hashed)
+        actual_content = decrypt(datas.manager, actual_password_not_hashed)
+        new_content = crypt(actual_content, new_password_not_hashed)
         actual_password_not_hashed = new_password_not_hashed
         datas.manager = new_content
         datas.save()
@@ -451,7 +420,7 @@ class Datas:
             ["Actual password", "Enter your new password", "Confirm your password", "Password changed successfully !", "The actual password is wrong !", "The passwords are not the same !", "The new password must not be empty !", "Back", "Modify your password"], 
             ["Lock the session", "Crypt / Decrytp Software", "Random Password Generator", "Passwords Manager"],
             ["Input", "Output", "Put a key here", "Crypt", "Decrypt"],
-            ["Input the lenght of your password", "Password vulnerable !", "Password weak !", "Password strong !", "Generate a\npassword", "Test the efficiency\nof your password"],
+            ["Input the length of your password", "Password vulnerable !", "Password weak !", "Password strong !", "Generate a\npassword", "Test the efficiency\nof your password"],
             ["Login", "Crypt / Decrypt", "Random Password Generator", "Passwords Manager"]]
         else:
             values_palet = ["Par default", "Sombre", "Clair", "Noir et Rouge", "Gris et Rouge", "Bleu et Marron", "Bleu et Orange", "Noir et Bleu", "Vert et Orange", "Blanc et Bleu", "Bleu et Jaune", "Bordeaux et Noir"]
@@ -473,6 +442,21 @@ class Datas:
 
 
 #? Functions
+def crypt(plain_text:str, secret:str)-> str:
+    key = hashlib.sha256(secret.encode()).digest()
+    iv  = get_random_bytes(AES.block_size)
+    cipher = AES.new(key, AES.MODE_EAX, nonce=iv)
+    ciphertext, tag = cipher.encrypt_and_digest(plain_text.encode())
+    return base64.b64encode(iv + tag + ciphertext).decode()
+
+def decrypt(encoded:str, secret:str)-> str:
+    data = base64.b64decode(encoded)
+    iv, tag, ciphertext = data[:16], data[16:32], data[32:]
+    key = hashlib.sha256(secret.encode()).digest()
+    cipher = AES.new(key, AES.MODE_EAX, nonce=iv)
+    plain = cipher.decrypt_and_verify(ciphertext, tag)
+    return plain.decode()
+
 def return_button()-> None:
     if locate == "login_page":
         login_page.login()
@@ -681,16 +665,15 @@ if __name__ == "__main__":
 
     locate = "login_page"
 
-    alph = []
-    for i in range(32, 127):
-        alph.append(chr(i))
-    alph.extend(["€", "é", "è", "ê", "ë", "à", "â", "ù", "û", "ü", "ô", "î", "ç", "\n"])
-
-    min = "abcdefghijklmnopqrstuvwxyz"
-    maj = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    num = "0123456789"
-    symbols = "{}()[]/|.!?,;:+-*%^=€$£_&#@ "
-    all = min + maj + num + symbols
+    min = string.ascii_lowercase
+    maj = string.ascii_uppercase
+    num = string.digits
+    symbols = string.punctuation
+    all = []
+    all.extend(list(min))
+    all.extend(list(maj))
+    all.extend(list(num))
+    all.extend(list(symbols))
 
     password = datas.password
 
